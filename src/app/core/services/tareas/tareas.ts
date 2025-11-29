@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../../enviroment/enviroment';
 
 export interface Tarea {
   idTarea?: number;
@@ -41,7 +42,7 @@ export interface UsuarioDisponible {
   providedIn: 'root'
 })
 export class TareasService {
-  private API_URL = 'http://localhost:3000/api/tareas';
+  private API_URL = `${environment.apiUrl}/tareas`;
 
   constructor(private http: HttpClient) { }
 

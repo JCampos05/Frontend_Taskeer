@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom, Subject } from 'rxjs';
+import { environment } from '../../../../enviroment/enviroment';
 
 // Interfaz para las respuestas del API
 interface ApiResponse<T> {
@@ -33,8 +34,8 @@ export interface Lista {
   providedIn: 'root'
 })
 export class ListasService {
-  private API_URL = 'http://localhost:3000/api/listas';
-  private COMPARTIR_URL = 'http://localhost:3000/api/compartir';
+  private API_URL = `${environment.apiUrl}/listas`;
+  private COMPARTIR_URL = `${environment.apiUrl}/compartir`;
 
   // Evento para notificar cambios en las listas
   private listasCambiadasSubject = new Subject<void>();

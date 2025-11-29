@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../../enviroment/enviroment';
 
 export interface Categoria {
   idCategoria?: number;
@@ -24,8 +25,8 @@ export interface Categoria {
   providedIn: 'root'
 })
 export class CategoriasService {
-  private API_URL = 'http://localhost:3000/api/categorias';
-  private COMPARTIR_URL = 'http://localhost:3000/api/compartir';
+  private API_URL = `${environment.apiUrl}/categorias`;
+  private COMPARTIR_URL = `${environment.apiUrl}/compartir`;;
 
   constructor(private http: HttpClient) { }
 

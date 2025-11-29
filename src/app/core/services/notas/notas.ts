@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../../../enviroment/enviroment';
 
 export interface Nota {
   idNota?: number;
@@ -19,7 +20,7 @@ export interface Nota {
   providedIn: 'root'
 })
 export class NotaService {
-  private apiUrl = 'http://localhost:3000/api/notas';
+  private apiUrl = `${environment.apiUrl}/notas`;
   private notasSubject = new BehaviorSubject<Nota[]>([]);
   public notas$ = this.notasSubject.asObservable();
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { environment } from '../../../../enviroment/enviroment';
 
 export interface Mensaje {
   idMensaje: number;
@@ -71,8 +72,9 @@ export interface MensajeLeido {
   providedIn: 'root'
 })
 export class SocketService {
-  // ✅ URL del backend - VERIFICA QUE COINCIDA CON TU PUERTO
-  private readonly API_URL = 'http://localhost:3000';
+  //  URL del backend - VERIFICA QUE COINCIDA CON TU PUERTO
+  private readonly API_URL = environment.socketUrl;
+  
   
   private socket: Socket | null = null;
   

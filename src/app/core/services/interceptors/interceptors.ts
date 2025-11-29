@@ -3,6 +3,7 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 
+
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   
@@ -27,7 +28,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         }
         
         if (error.status === 403) {
-          console.error('⛔ Acceso prohibido');
+          console.error('Acceso prohibido');
         }
         
         return throwError(() => error);

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../../enviroment/enviroment';
 
 export interface EstadisticasGenerales {
   totalTareas: number;
@@ -48,7 +49,7 @@ export interface CategoriaMasFrecuente {
   providedIn: 'root'
 })
 export class EstadisticasService {
-  private API_URL = 'http://localhost:3000/api/estadisticas';
+  private API_URL = `${environment.apiUrl}/estadisticas`;
 
   constructor(private http: HttpClient) {}
 

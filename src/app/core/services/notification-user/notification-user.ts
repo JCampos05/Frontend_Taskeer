@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { AuthService } from '../authentication/authentication';
+import { environment } from '../../../../enviroment/enviroment';
 
 export interface Notificacion {
   idNotificacion: number;
@@ -41,8 +42,8 @@ interface NotificacionesResponse {
   providedIn: 'root'
 })
 export class NotificationService {
-  private apiUrl = 'http://localhost:3000/api/compartir/notificaciones';
-  private sseUrl = 'http://localhost:3000/api/sse/notificaciones';
+  private apiUrl = `${environment.apiUrl}/compartir/notificaciones`;
+  private sseUrl = `${environment.apiUrl}/sse/notificaciones`;
 
   private notificacionesSubject = new BehaviorSubject<Notificacion[]>([]);
   private cantidadNoLeidasSubject = new BehaviorSubject<number>(0);
@@ -66,7 +67,7 @@ export class NotificationService {
   }
 
   private inicializarConToken(): void {
-    // ✅ FIX: Usar el mismo nombre de token que AuthService
+    // FIX: Usar el mismo nombre de token que AuthService
     const token = localStorage.getItem('auth_token');
 
     if (token) {

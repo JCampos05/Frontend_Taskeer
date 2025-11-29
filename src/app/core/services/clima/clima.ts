@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../../../enviroment/enviroment';
 
 export interface ClimaData {
   temperatura: number;
@@ -19,7 +20,7 @@ export interface ClimaData {
   providedIn: 'root'
 })
 export class ClimaService {
-  private apiKey = '107d3548ebcd48fda1363047251711'; // Reemplazar con tu API key de WeatherAPI.com
+  private apiKey = environment.weatherApiKey; // Reemplazar con tu API key de WeatherAPI.com
   private apiUrl = 'https://api.weatherapi.com/v1/current.json';
 
   constructor(private http: HttpClient) { }

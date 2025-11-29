@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../../../enviroment/enviroment';
 
 export interface ZonaHoraria {
   idZona: number;
@@ -17,7 +18,7 @@ export interface ZonaHoraria {
   providedIn: 'root'
 })
 export class ZonasService {
-  private apiUrl = 'http://localhost:3000/api/zonas';
+  private apiUrl = `${environment.apiUrl}/zonas`;
   private zonaActualSubject = new BehaviorSubject<string | null>(null);
   public zonaActual$ = this.zonaActualSubject.asObservable();
 

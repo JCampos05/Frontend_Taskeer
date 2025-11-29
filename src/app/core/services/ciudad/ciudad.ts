@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { environment } from '../../../../enviroment/enviroment';
 
 export interface Ciudad {
   nombre: string;
@@ -16,7 +17,7 @@ export interface Ciudad {
   providedIn: 'root'
 })
 export class CiudadAutocompleteService {
-  private apiKey = '107d3548ebcd48fda1363047251711'; // Tu API key de WeatherAPI
+  private apiKey = environment.weatherApiKey; // Tu API key de WeatherAPI
   private apiUrl = 'https://api.weatherapi.com/v1/search.json';
 
   constructor(private http: HttpClient) {}

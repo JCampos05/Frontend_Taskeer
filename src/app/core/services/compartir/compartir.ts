@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
+import { environment } from '../../../../enviroment/enviroment';
 
-// ✅ Interface corregida
+// Interface corregida
 export interface CompartirResponse {
   clave?: string;
   url?: string;
@@ -60,7 +61,7 @@ export interface InfoCompartidos {
   providedIn: 'root'
 })
 export class CompartirService {
-  private apiUrl = 'http://localhost:3000/api/compartir';
+  private apiUrl = `${environment.apiUrl}/compartir`;
 
   constructor(private http: HttpClient) { }
 

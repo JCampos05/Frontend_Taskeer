@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Mensaje, UsuarioOnline } from '../sockets/sockets';
+import { environment } from '../../../../enviroment/enviroment';
 
 // ========== INTERFACES ADICIONALES ==========
 export interface MensajeNoLeido {
@@ -38,8 +39,8 @@ interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class ChatService {
-  // ⭐ URL del backend - MODIFICA SEGÚN TU CONFIGURACIÓN
-  private readonly API_URL = 'http://localhost:3000/api/chat';
+  // URL del backend - MODIFICA SEGÚN TU CONFIGURACIÓN
+  private readonly API_URL = environment.socketUrl;
 
   constructor(private http: HttpClient) {}
 
