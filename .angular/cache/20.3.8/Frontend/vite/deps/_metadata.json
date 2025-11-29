@@ -1,80 +1,80 @@
 {
-  "hash": "bcd1300b",
-  "configHash": "7e41aa1f",
+  "hash": "1c4e4c47",
+  "configHash": "31694396",
   "lockfileHash": "fba7f502",
-  "browserHash": "2afcd06b",
+  "browserHash": "6a52f95c",
   "optimized": {
     "@angular/cdk/drag-drop": {
       "src": "../../../../../../node_modules/@angular/cdk/fesm2022/drag-drop.mjs",
       "file": "@angular_cdk_drag-drop.js",
-      "fileHash": "6cf8f230",
+      "fileHash": "64ecca01",
       "needsInterop": false
     },
     "@angular/common": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "df0bf0fe",
+      "fileHash": "de761540",
       "needsInterop": false
     },
     "@angular/common/http": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/http.mjs",
       "file": "@angular_common_http.js",
-      "fileHash": "f1751757",
+      "fileHash": "ec91a588",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "bf6a8288",
+      "fileHash": "f33c0ae1",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "94fc2aef",
+      "fileHash": "66fd9d70",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "afaad261",
+      "fileHash": "7b0268a4",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "2c4c4766",
+      "fileHash": "dc4e9f14",
+      "needsInterop": false
+    },
+    "chart.js": {
+      "src": "../../../../../../node_modules/chart.js/dist/chart.js",
+      "file": "chart__js.js",
+      "fileHash": "20ad748e",
       "needsInterop": false
     },
     "rxjs": {
       "src": "../../../../../../node_modules/rxjs/dist/esm5/index.js",
       "file": "rxjs.js",
-      "fileHash": "f62cec87",
+      "fileHash": "4c951353",
       "needsInterop": false
     },
     "rxjs/operators": {
       "src": "../../../../../../node_modules/rxjs/dist/esm5/operators/index.js",
       "file": "rxjs_operators.js",
-      "fileHash": "db10fe79",
+      "fileHash": "dc3899a3",
       "needsInterop": false
     },
     "socket.io-client": {
       "src": "../../../../../../node_modules/socket.io-client/build/esm/index.js",
       "file": "socket__io-client.js",
-      "fileHash": "ddcff453",
+      "fileHash": "8ae11134",
       "needsInterop": false
     },
     "zone.js": {
       "src": "../../../../../../node_modules/zone.js/fesm2015/zone.js",
       "file": "zone__js.js",
-      "fileHash": "425efec2",
+      "fileHash": "bcc9dd61",
       "needsInterop": true
-    },
-    "chart.js": {
-      "src": "../../../../../../node_modules/chart.js/dist/chart.js",
-      "file": "chart__js.js",
-      "fileHash": "3a9513a3",
-      "needsInterop": false
     }
   },
   "chunks": {
