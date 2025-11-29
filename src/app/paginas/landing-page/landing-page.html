@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taskeer - Gestión de proyectos simplificada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&family=Montserrat:wght@600;700;900&display=swap"
+        rel="stylesheet" />
+    <style></style>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="brand-container">
+                <div class="brand-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="48" height="48">
+                        <!-- Fondo del tablero con esquinas redondeadas -->
+                        <rect width="200" height="200" rx="32" ry="32" fill="#274690" />
+
+                        <!-- Tres círculos superiores (rueditas del tablero) -->
+                        <circle cx="42" cy="38" r="8" fill="#FFFFFF" opacity="0.4" />
+                        <circle cx="100" cy="38" r="8" fill="#FFFFFF" opacity="0.4" />
+                        <circle cx="158" cy="38" r="8" fill="#FFFFFF" opacity="0.4" />
+
+                        <!-- Columna 1 - Pendiente (círculo) -->
+                        <rect x="25" y="65" width="42" height="115" rx="8" ry="8" fill="#FFFFFF" />
+                        <circle cx="46" cy="122" r="10" fill="#274690" />
+
+                        <!-- Columna 2 - En Progreso (línea) -->
+                        <rect x="79" y="65" width="42" height="115" rx="8" ry="8" fill="#FFFFFF" />
+                        <rect x="87" y="118" width="26" height="8" rx="4" ry="4" fill="#274690" />
+
+                        <!-- Columna 3 - Completado (check) -->
+                        <rect x="133" y="65" width="42" height="115" rx="8" ry="8" fill="#FFFFFF" />
+                        <path d="M 143 120 L 151 130 L 165 110" stroke="#274690" stroke-width="6" stroke-linecap="round"
+                            stroke-linejoin="round" fill="none" />
+                    </svg>
+                </div>
+                <div class="brand-name">Taskeer</div>
+            </div>
+            <button class="btn btn-primary" (click)="onComenzar()">
+                <i class="fas fa-rocket"></i>
+                Comenzar
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-wrapper">
+            <div class="hero-content">
+                <h1>Gestión de proyectos simplificada</h1>
+                <p class="subtitle">
+                    Taskeer ofrece una solución integral para la gestión de tareas que aumenta la
+                    productividad, mejora la colaboración y optimiza los procesos de trabajo en equipos de
+                    cualquier tamaño.
+                </p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" (click)="onComenzar()">
+                        <i class="fas fa-rocket"></i>
+                        Comenzar Ahora
+                    </button>
+                    <button class="btn btn-outline" (click)="onSolicitarDemo()">
+                        <i class="fas fa-calendar-check"></i>
+                        Solicitar Demo
+                    </button>
+                </div>
+                <div class="hero-badges">
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i>
+                        14 días de prueba
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i>
+                        Soporte 24/7
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i>
+                        Sin tarjeta de crédito
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <svg width="600" height="400" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Fondo del dashboard -->
+                    <rect x="50" y="50" width="500" height="300" rx="12" fill="white" stroke="#ECF0F1" stroke-width="2" />
+
+                    <!-- Header del dashboard -->
+                    <rect x="50" y="50" width="500" height="60" rx="12" fill="#1ABC9C" />
+                    <rect x="50" y="90" width="500" height="20" fill="#1ABC9C" />
+
+                    <!-- Título -->
+                    <text x="70" y="80" fill="white" font-size="18" font-weight="700">Mi Proyecto</text>
+
+                    <!-- Avatar -->
+                    <circle cx="520" cy="75" r="18" fill="white" opacity="0.3" />
+                    <circle cx="520" cy="75" r="15" fill="white" />
+
+                    <!-- Columnas Kanban -->
+                    <!-- TO DO -->
+                    <rect x="70" y="130" width="140" height="200" rx="8" fill="#F4F5F7" />
+                    <rect x="78" y="138" width="124" height="30" rx="4" fill="#3498DB" />
+                    <text x="140" y="158" text-anchor="middle" fill="white" font-size="12" font-weight="600">
+                        TO DO
+                    </text>
+
+                    <rect x="78" y="176" width="124" height="50" rx="4" fill="white" />
+                    <rect x="85" y="183" width="30" height="3" rx="1.5" fill="#3498DB" />
+                    <rect x="85" y="192" width="80" height="2" rx="1" fill="#BDC3C7" />
+                    <rect x="85" y="200" width="60" height="2" rx="1" fill="#BDC3C7" />
+
+                    <rect x="78" y="234" width="124" height="50" rx="4" fill="white" />
+                    <rect x="85" y="241" width="35" height="3" rx="1.5" fill="#3498DB" />
+                    <rect x="85" y="250" width="85" height="2" rx="1" fill="#BDC3C7" />
+                    <rect x="85" y="258" width="70" height="2" rx="1" fill="#BDC3C7" />
+
+                    <!-- IN PROGRESS -->
+                    <rect x="230" y="130" width="140" height="200" rx="8" fill="#F4F5F7" />
+                    <rect x="238" y="138" width="124" height="30" rx="4" fill="#F39C12" />
+                    <text x="300" y="158" text-anchor="middle" fill="white" font-size="12" font-weight="600">
+                        IN PROGRESS
+                    </text>
+
+                    <rect x="238" y="176" width="124" height="50" rx="4" fill="white" />
+                    <rect x="245" y="183" width="40" height="3" rx="1.5" fill="#F39C12" />
+                    <rect x="245" y="192" width="75" height="2" rx="1" fill="#BDC3C7" />
+                    <rect x="245" y="200" width="90" height="2" rx="1" fill="#BDC3C7" />
+                    <circle cx="330" cy="215" r="8" fill="#F39C12" opacity="0.3" />
+                    <text x="330" y="219" text-anchor="middle" fill="#F39C12" font-size="10" font-weight="700">
+                        !
+                    </text>
+
+                    <!-- DONE -->
+                    <rect x="390" y="130" width="140" height="200" rx="8" fill="#F4F5F7" />
+                    <rect x="398" y="138" width="124" height="30" rx="4" fill="#27AE60" />
+                    <text x="460" y="158" text-anchor="middle" fill="white" font-size="12" font-weight="600">
+                        DONE
+                    </text>
+
+                    <rect x="398" y="176" width="124" height="50" rx="4" fill="white" />
+                    <circle cx="410" cy="201" r="8" fill="#27AE60" />
+                    <path d="M407 201 L409 203 L413 198" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <rect x="425" y="192" width="70" height="2" rx="1" fill="#BDC3C7" opacity="0.6" />
+                    <rect x="425" y="200" width="85" height="2" rx="1" fill="#BDC3C7" opacity="0.6" />
+
+                    <rect x="398" y="234" width="124" height="50" rx="4" fill="white" />
+                    <circle cx="410" cy="259" r="8" fill="#27AE60" />
+                    <path d="M407 259 L409 261 L413 256" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <rect x="425" y="250" width="65" height="2" rx="1" fill="#BDC3C7" opacity="0.6" />
+                    <rect x="425" y="258" width="80" height="2" rx="1" fill="#BDC3C7" opacity="0.6" />
+
+                    <!-- Decoración: líneas de conexión -->
+                    <path d="M210 201 L230 201" stroke="#3498DB" stroke-width="2" stroke-dasharray="4 4" opacity="0.4" />
+                    <path d="M370 201 L390 201" stroke="#F39C12" stroke-width="2" stroke-dasharray="4 4" opacity="0.4" />
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="section-heading">
+            <h2>Características diseñadas para equipos</h2>
+            <p>
+                Nuestra plataforma integra todas las herramientas que los equipos modernos necesitan para
+                trabajar de manera eficiente
+            </p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-columns"></i>
+                </div>
+                <h3>Tableros Kanban Avanzados</h3>
+                <p>
+                    Visualiza y gestiona flujos de trabajo con tableros personalizables que se adaptan a la
+                    metodología de trabajo de tu equipo, permitiendo identificar cuellos de botella y
+                    optimizar procesos.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Análisis de Rendimiento</h3>
+                <p>
+                    Obtén insights valiosos sobre tu productividad con informes detallados, gráficos
+                    interactivos y KPIs personalizables para tomar decisiones basadas en tus datos.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+                <h3>Gestión de Recursos</h3>
+                <p>
+                    Asigna tareas de manera eficiente, evita la sobrecarga de trabajo y optimiza la
+                    distribución de recursos humanos con herramientas intuitivas de planificación de
+                    capacidad.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <h3>Automatización de Flujos</h3>
+                <p>
+                    Elimina tareas repetitivas con reglas de automatización personalizables que se adaptan a
+                    tus procesos, aumentando la eficiencia y reduciendo errores.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Seguridad Empresarial</h3>
+                <p>
+                    Protege la información sensible con controles de acceso granulares, autenticación de dos
+                    factores y cifrado de extremo a extremo que cumple con los estándares de la industria.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-puzzle-piece"></i>
+                </div>
+                <h3>Próximas Integraciones Corporativas</h3>
+                <p>
+                    Próximamente conecta Taskeer con las herramientas que ya utilizas como Microsoft 365,
+                    Google Workspace, Slack, Teams y más para crear un ecosistema de trabajo sin fisuras.
+                </p>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

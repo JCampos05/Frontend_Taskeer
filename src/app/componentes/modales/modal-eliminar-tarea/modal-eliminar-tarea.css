@@ -1,0 +1,221 @@
+/* Backdrop - Fondo oscuro */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Animación de salida del backdrop */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.modal-backdrop.closing {
+    animation: fadeOut 0.2s ease-in forwards;
+}
+
+/* Container del modal */
+.modal-container {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px) scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Animación de salida del modal */
+@keyframes slideDown {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+}
+
+.modal-container.closing {
+    animation: slideDown 0.2s ease-in forwards;
+}
+
+/* Header */
+.modal-header {
+    padding: 24px 24px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-icon {
+    font-size: 24px;
+    color: #dc2626;
+}
+
+.modal-titulo {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Body */
+.modal-body {
+    padding: 24px;
+}
+
+.modal-pregunta {
+    margin: 0 0 16px;
+    font-size: 15px;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.modal-pregunta strong {
+    color: #1f2937;
+    font-weight: 600;
+}
+
+/* Advertencia */
+.modal-advertencia {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.modal-advertencia i {
+    color: #dc2626;
+    font-size: 16px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.modal-advertencia span {
+    font-size: 14px;
+    color: #991b1b;
+    line-height: 1.5;
+}
+
+/* Footer */
+.modal-footer {
+    padding: 16px 24px;
+    background: #f9fafb;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Botones */
+.modal-footer button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-cancelar {
+    background: white;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
+}
+
+.btn-cancelar:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+    color: #374151;
+}
+
+.btn-eliminar {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-eliminar:hover {
+    background: #b91c1c;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.btn-eliminar:active {
+    transform: scale(0.98);
+}
+
+.btn-cancelar:active {
+    transform: scale(0.98);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .modal-container {
+        width: 95%;
+        margin: 16px;
+    }
+
+    .modal-header {
+        padding: 20px 20px 12px;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .modal-footer {
+        padding: 12px 20px;
+        flex-direction: column;
+    }
+
+    .modal-footer button {
+        width: 100%;
+        justify-content: center;
+    }
+}

@@ -1,0 +1,43 @@
+/* Sugerencias de ciudades */
+.ciudades-sugerencias {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    margin-top: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(9, 30, 66, 0.15);
+}
+
+.sugerencia-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s;
+    border-bottom: 1px solid #f5f3f5;
+}
+
+.sugerencia-item:last-child {
+    border-bottom: none;
+}
+
+.sugerencia-item:hover {
+    background: #f5f3f5;
+    color: #274690;
+}
+
+.sugerencia-item i {
+    color: #576ca8;
+    font-size: 14px;
+}
+
+.form-group {
+    position: relative;
+}

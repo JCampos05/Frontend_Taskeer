@@ -1,0 +1,384 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 650px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 1px solid #e0e0e0;
+    background: #f8f9fa;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-header h3 i {
+    color: #0052CC;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-close:hover {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.seccion-invitar,
+.seccion-clave,
+.seccion-usuarios {
+    margin-bottom: 30px;
+}
+
+h4 {
+    margin: 0 0 15px 0;
+    font-size: 1.1rem;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+h4 i {
+    color: #0052CC;
+}
+
+.form-invitar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.input-email {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border 0.2s;
+}
+
+.input-email:focus {
+    outline: none;
+    border-color: #0052CC;
+}
+
+.select-rol {
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    min-width: 150px;
+    cursor: pointer;
+    background: white;
+}
+
+.btn-invitar {
+    padding: 12px 24px;
+    background: #0052CC;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.btn-invitar:hover:not(:disabled) {
+    background: #0747A6;
+}
+
+.btn-invitar:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-invitar i.fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.info-roles {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #0052CC;
+}
+
+.rol-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.rol-info:last-child {
+    margin-bottom: 0;
+}
+
+.rol-info i {
+    width: 20px;
+    color: #0052CC;
+}
+
+.clave-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.clave {
+    flex: 1;
+    padding: 14px;
+    background: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.btn-copiar {
+    padding: 12px 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.btn-copiar:hover {
+    background: #45a049;
+}
+
+.lista-usuarios {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.usuario-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.2s;
+}
+
+.usuario-item:hover {
+    border-color: #0052CC;
+    box-shadow: 0 2px 8px rgba(0, 82, 204, 0.1);
+}
+
+.usuario-info {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex: 1;
+}
+
+.usuario-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0052cc 0%, #0065ff 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 16px;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.usuario-datos {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.usuario-datos strong {
+    font-size: 1rem;
+    color: #2c3e50;
+}
+
+.usuario-email {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+.badge-creador {
+    font-size: 0.8rem;
+    color: #FF9800;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.usuario-acciones {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.select-rol-small {
+    padding: 8px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background: white;
+}
+
+.btn-revocar {
+    padding: 10px 14px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-revocar:hover {
+    background: #d32f2f;
+}
+
+.no-usuarios {
+    text-align: center;
+    color: #999;
+    padding: 40px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+
+.no-usuarios i {
+    color: #0052CC;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .form-invitar {
+        flex-direction: column;
+    }
+
+    .input-email,
+    .select-rol {
+        width: 100%;
+    }
+
+    .usuario-item {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .usuario-acciones {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

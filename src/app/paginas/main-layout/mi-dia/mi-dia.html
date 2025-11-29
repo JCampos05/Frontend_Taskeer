@@ -1,0 +1,69 @@
+<div class="mi-dia-wrapper">
+  <div class="mi-dia-header">
+    <div class="header-left">
+      <div class="titulo-seccion">
+        <i class="fas fa-sun"></i>
+        <h2>Mi Día</h2>
+      </div>
+      <p class="subtitulo">{{ obtenerFechaHoy() }}</p>
+    </div>
+
+    <!-- Widget de Clima -->
+    <div class="clima-widget">
+      <!-- Loading state -->
+      <div *ngIf="cargandoClima" class="clima-loading">
+        <div class="spinner-clima"></div>
+        <span>Cargando clima...</span>
+      </div>
+
+      <!-- Error state -->
+      <div *ngIf="errorClima && !cargandoClima" class="clima-error">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>No disponible</span>
+      </div>
+
+      <!-- Clima cargado -->
+      <div *ngIf="climaData && !cargandoClima" class="clima-info">
+        <!-- Lado izquierdo: Ícono + Temperatura + Ubicación -->
+        <div class="clima-principal">
+          <div class="clima-top">
+            <div class="clima-icono">
+              <i class="fas" [ngClass]="climaData.icono"></i>
+            </div>
+            <div class="clima-temp">
+              <span class="temperatura">{{ climaData.temperatura }}°</span>
+              <span class="descripcion">{{ climaData.descripcion }}</span>
+            </div>
+          </div>
+          <div class="clima-ubicacion">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>{{ climaData.ciudad }}, {{ climaData.pais }}</span>
+          </div>
+        </div>
+
+        <!-- Separador vertical -->
+        <div class="clima-separador"></div>
+
+        <!-- Lado derecho: Métricas en vertical -->
+        <div class="clima-extras">
+          <div class="clima-item">
+            <i class="fas fa-tint"></i>
+            <span>{{ climaData.humedad }}%</span>
+          </div>
+          <div class="clima-item">
+            <i class="fas fa-wind"></i>
+            <span>{{ climaData.viento }} km/h</span>
+          </div>
+          <div class="clima-item">
+            <i class="fas fa-thermometer-half"></i>
+            <span>ST: {{ climaData.sensacionTermica }}°</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mi-dia-content">
+    <app-tablero tipoVista="mi-dia"></app-tablero>
+  </div>
+</div>

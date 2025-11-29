@@ -1,0 +1,192 @@
+<div class="mi-semana-container">
+    <!-- Header con navegación de semana -->
+    <div class="semana-header">
+        <div class="semana-navegacion">
+            <button class="btn-nav" (click)="semanaAnterior()" title="Semana anterior">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <button class="btn-hoy" (click)="irASemanaActual()">
+                <i class="fas fa-calendar-day"></i>
+                Hoy
+            </button>
+
+            <button class="btn-nav" (click)="semanaSiguiente()" title="Semana siguiente">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <div class="semana-selector">
+                <button class="btn-semana-actual" (click)="toggleCalendario()">
+                    <i class="far fa-calendar-alt"></i>
+                    <span *ngIf="dias && dias.length > 0">
+                        {{dias[0].mes}} {{dias[0].diaNumero}} - {{dias[6].mes}} {{dias[6].diaNumero}}
+                    </span>
+                    <i class="fas fa-chevron-down" *ngIf="!mostrarCalendario"></i>
+                    <i class="fas fa-chevron-up" *ngIf="mostrarCalendario"></i>
+                </button>
+
+                <!-- Calendario desplegable unificado -->
+                <div class="calendario-desplegable" *ngIf="mostrarCalendario">
+                    <div class="calendario-header">
+                        <button class="calendario-nav-btn" (click)="mesAnterior()">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span class="calendario-mes-ano">{{mesCalendario}} {{anioCalendario}}</span>
+                        <button class="calendario-nav-btn" (click)="mesSiguiente()">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="calendario-dias-semana">
+                        <span>Dom</span>
+                        <span>Lun</span>
+                        <span>Mar</span>
+                        <span>Mie</span>
+                        <span>Jue</span>
+                        <span>Vie</span>
+                        <span>Sab</span>
+                    </div>
+
+                    <div class="calendario-grid">
+                        <button *ngFor="let diaCalendario of diasCalendario" class="calendario-dia-btn"
+                            [class.otro-mes]="!diaCalendario.delMesActual" [class.hoy-calendario]="diaCalendario.esHoy"
+                            [class.seleccionado]="diaCalendario.seleccionado"
+                            (click)="seleccionarDiaCalendario(diaCalendario)">
+                            {{diaCalendario.numero}}
+                        </button>
+                    </div>
+
+                    <div class="calendario-footer">
+                        <button class="btn-hoy-calendario" (click)="irAHoyCalendario()">
+                            Hoy
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-nueva-tarea" (click)="abrirPanelDetalles()">
+            <i class="fas fa-plus"></i>
+            Nueva Tarea
+        </button>
+    </div>
+
+    <!-- Contenedor de columnas con scroll -->
+    <div class="dias-container" #scrollContainer>
+        <div class="dias-scroll">
+            <div *ngFor="let dia of dias; let i = index; trackBy: trackByDia" class="dia-columna"
+                [class.hoy]="dia.esHoy" (dragover)="onDragOver($event)" (dragenter)="onDragEnter($event, dia)"
+                (dragleave)="onDragLeave($event)" (drop)="onDrop($event, dia)">
+                <!-- Header del día -->
+                <div class="dia-header" (click)="seleccionarDia(dia, i)">
+                    <div class="dia-info">
+                        <span class="dia-nombre">{{dia.diaNombre}}</span>
+                        <span class="dia-numero" [class.hoy-numero]="dia.esHoy">{{dia.diaNumero}}</span>
+                    </div>
+                    <span class="tareas-count">{{dia.tareas.length}}</span>
+                </div>
+
+                <!-- Botón agregar tarea -->
+                <button class="btn-agregar-tarea-dia" (click)="crearTareaEnDia(dia)">
+                    <i class="fas fa-plus"></i>
+                    Agregar tarea
+                </button>
+
+                <!-- Lista de tareas -->
+                <div class="tareas-lista">
+                    <div *ngFor="let tarea of dia.tareas; trackBy: trackByTarea" class="tarea-card"
+                        [class.completada]="tarea.estado === 'C'" [class.alta-prioridad]="tarea.prioridad === 'A'"
+                        draggable="true" (dragstart)="onDragStart($event, tarea, dia)" (dragend)="onDragEnd($event)"
+                        (click)="abrirPanelDetalles(tarea.idTarea)">
+                        <div class="tarea-header-card">
+                            <div class="tarea-nombre">
+                                <i *ngIf="tarea.importante" class="fas fa-star importante-icon"></i>
+                                {{tarea.nombre}}
+                            </div>
+                            <i *ngIf="tarea.prioridad === 'A'" class="fas fa-flag flag-alta"></i>
+                        </div>
+
+                        <div class="tarea-info" *ngIf="tarea.nombreLista">
+                            <span class="lista-badge" [style.background-color]="tarea.colorLista">
+                                <span *ngIf="obtenerIconoLista(tarea)">{{obtenerIconoLista(tarea)}}</span>
+                                <i *ngIf="!obtenerIconoLista(tarea) && tarea.iconoLista && tarea.iconoLista.startsWith('fa')"
+                                    [class]="tarea.iconoLista"></i>
+                                {{tarea.nombreLista}}
+                            </span>
+                        </div>
+                        <div class="tarea-meta">
+                            <span *ngIf="tarea.pasos && tarea.pasos.length > 0" class="meta-item">
+                                <i class="fas fa-list-ol"></i>
+                                {{tarea.pasos.length}}
+                            </span>
+                            <span *ngIf="tarea.notas" class="meta-item">
+                                <i class="fas fa-sticky-note"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zona drop vacía -->
+                <div class="zona-drop-vacia" *ngIf="dia.tareas.length === 0">
+                    <i class="fas fa-inbox"></i>
+                    <span>Sin tareas</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel día seleccionado -->
+    <div class="panel-dia-overlay" *ngIf="panelDiaAbierto" (click)="cerrarPanelDia()">
+        <div class="panel-dia-contenido" (click)="$event.stopPropagation()" *ngIf="diaSeleccionadoPanel">
+            <button class="btn-cerrar-panel" (click)="cerrarPanelDia()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="panel-dia-header">
+                <h3>{{diaSeleccionadoPanel.diaNombre}}, {{diaSeleccionadoPanel.diaNumero}} de
+                    {{diaSeleccionadoPanel.mes}}</h3>
+                <span class="tareas-total">{{diaSeleccionadoPanel.tareas.length}} tareas</span>
+            </div>
+
+            <button class="btn-nueva-tarea-panel" (click)="crearTareaEnDia(diaSeleccionadoPanel)">
+                <i class="fas fa-plus"></i>
+                Nueva Tarea
+            </button>
+
+            <div class="panel-dia-tareas">
+                <div *ngFor="let tarea of diaSeleccionadoPanel.tareas; trackBy: trackByTarea" class="tarea-panel-item"
+                    (click)="abrirPanelDetalles(tarea.idTarea)">
+                    <div class="tarea-check">
+                        <input type="checkbox" [checked]="tarea.estado === 'C'" (click)="$event.stopPropagation()" />
+                    </div>
+
+                    <div class="tarea-contenido">
+                        <div class="tarea-nombre-panel">
+                            <i *ngIf="tarea.importante" class="fas fa-star importante-icon"></i>
+                            {{tarea.nombre}}
+                        </div>
+
+                        <div class="tarea-detalles-panel">
+                            <span *ngIf="tarea.nombreLista" class="lista-tag">
+                                {{obtenerIconoLista(tarea)}} {{tarea.nombreLista}}
+                            </span>
+                            <span *ngIf="tarea.prioridad === 'A'" class="prioridad-tag">
+                                <i class="fas fa-flag"></i> Alta
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sin-tareas-panel" *ngIf="diaSeleccionadoPanel.tareas.length === 0">
+                    <i class="fas fa-inbox"></i>
+                    <p>No hay tareas para este dia</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel de detalles -->
+    <app-panel-detalles #panelDetalles [abierto]="panelDetallesAbierto" [idTarea]="idTareaSeleccionada"
+        [puedeEditar]="puedeEditarTarea" (cerrar)="cerrarPanelDetalles()"
+        (tareaGuardada)="onTareaGuardada()"></app-panel-detalles>
+</div>

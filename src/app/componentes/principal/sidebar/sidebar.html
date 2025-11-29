@@ -1,0 +1,181 @@
+<div
+  id="sidebar"
+  [style.display]="visible ? 'flex' : 'none'"
+  [class.collapsed]="isCollapsed"
+  [class.light-mode]="isLightMode"
+>
+  <div class="sidebar-content">
+    <div class="sidebar-section">
+      <h3>Vistas</h3>
+      <div class="sidebar-item" (click)="cargarMiDia()" [class.active]="esRutaActiva('/app/mi-dia')">
+        <i class="fas fa-sun"></i>
+        <span>Mi día</span>
+      </div>
+      <div class="sidebar-item" (click)="cargarMiSemana()" [class.active]="esRutaActiva('/app/mi-semana')">
+        <i class="fa-solid fa-calendar-week"></i>
+        <span>Mi semana</span>
+      </div>
+      <div class="sidebar-item" (click)="cargarTodasLasTareas()" [class.active]="esRutaActiva('/app/todas-tareas')">
+        <i class="fas fa-th-list"></i>
+        <span>Mis tareas</span>
+      </div>
+      <div class="sidebar-item" (click)="filtrarPorEstado('P')" [class.active]="esRutaActiva('/app/pendientes')">
+        <i class="far fa-clock"></i>
+        <span>Pendientes</span>
+      </div>
+      <div class="sidebar-item" (click)="filtrarPorEstado('N')" [class.active]="esRutaActiva('/app/progreso')">
+        <i class="fas fa-spinner"></i>
+        <span>En progreso</span>
+      </div>
+      <div class="sidebar-item" (click)="filtrarPorEstado('C')" [class.active]="esRutaActiva('/app/completadas')">
+        <i class="fas fa-check-circle"></i>
+        <span>Completadas</span>
+      </div>
+      <div class="sidebar-item" (click)="cargarTareasVencidas()" [class.active]="esRutaActiva('/app/vencidas')">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Vencidas</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Tools</h3>
+      <div class="sidebar-item" (click)="mostrarListasIndividuales()" [class.active]="esRutaActiva('/app/listas-individuales')">
+        <i class="fas fa-list"></i>
+        <span>Mis listas</span>
+      </div>
+      <div class="sidebar-item" (click)="mostrarListasImportantes()" [class.active]="esRutaActiva('/app/listas-importantes')">
+        <i class="fas fa-star"></i>
+        <span>Listas importantes</span>
+      </div>
+      <div class="sidebar-item" (click)="mostrarListasCompartidas()" [class.active]="esRutaActiva('/app/compartida')">
+        <i class="fa-solid fa-users"></i>
+        <span>Listas compartidas</span>
+      </div>
+      <div class="sidebar-item" (click)="mostrarCalendario()" [class.active]="esRutaActiva('/app/calendar')">
+        <i class="far fa-calendar"></i>
+        <span>Calendario</span>
+      </div>
+      <div class="sidebar-item" (click)="mostrarNotas()" [class.active]="esRutaActiva('/app/notas')">
+        <i class="far fa-sticky-note"></i>
+        <span>Notas</span>
+      </div>
+      <div class="sidebar-item" (click)="toggleCollapse()">
+        <i class="fas fa-bars"></i>
+        <span>Contraer</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-header">
+        <h3>Tableros</h3>
+        <button class="btn-add-categoria" (click)="abrirModalCategoria()" title="Agregar categoría">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+
+      <div id="sidebarCategorias">
+        <div *ngFor="let categoria of categorias" class="sidebar-categoria">
+          <div class="sidebar-categoria-header">
+            <div class="categoria-nombre-clickeable" (click)="verTablero(categoria.idCategoria)">
+              <i class="fas fa-folder categoria-icon"></i>
+              <i
+                class="fas chevron-icon"
+                [ngClass]="isCategoriaExpandida(categoria.idCategoria) ? 'fa-chevron-down' : 'fa-chevron-right'"
+                (click)="toggleCategoria(categoria.idCategoria); $event.stopPropagation()"
+              ></i>
+              <span>{{ categoria.nombre }}</span>
+            </div>
+            <div class="categoria-actions">
+              <button class="btn-share-categoria" (click)="compartirCategoria(categoria, $event)" title="Compartir categoría completa">
+                <i class="fas fa-share-nodes"></i>
+              </button>
+              <button class="btn-add-lista" (click)="abrirModalLista(categoria.idCategoria, $event)" title="Agregar lista">
+                <i class="fas fa-plus"></i>
+              </button>
+              <button class="btn-delete-categoria" (click)="confirmarEliminarCategoria(categoria, $event)" title="Eliminar categoría">
+                <i class="fas fa-trash"></i>
+              </button>
+              <span class="count">{{ categoria.listas?.length || 0 }}</span>
+            </div>
+          </div>
+
+          <div class="sidebar-listas" [style.display]="isCategoriaExpandida(categoria.idCategoria) ? 'block' : 'none'">
+            <div
+              *ngFor="let lista of categoria.listas"
+              class="sidebar-lista-item"
+              (click)="cargarTareasDeLista(lista.idLista)"
+              [class.active]="esListaActiva(lista.idLista)"
+            >
+              <span *ngIf="esEmoji(lista.icono)" class="emoji-icon">{{ lista.icono }}</span>
+              <span *ngIf="!esEmoji(lista.icono)" class="lista-icon-wrapper" [style.background-color]="lista.color || '#6554c0'">
+                <i [class]="obtenerClaseIcono(lista.icono)" class="icon-sidebar"></i>
+              </span>
+              <span>{{ lista.nombre }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-separator"></div>
+
+        <div class="agregar-lista-sin-categoria">
+          <button class="btn-agregar-lista-suelta" (click)="abrirModalListaSinCategoria()">
+            <i class="fas fa-plus"></i>
+            <span>Agregar lista sin categoría</span>
+          </button>
+        </div>
+
+        <div
+          *ngFor="let lista of listasSinCategoria"
+          class="sidebar-lista-suelta"
+          (click)="cargarTareasDeLista(lista.idLista)"
+          [class.active]="esListaActiva(lista.idLista)"
+        >
+          <span *ngIf="esEmoji(lista.icono)" class="emoji-icon">{{ lista.icono }}</span>
+          <span *ngIf="!esEmoji(lista.icono)" class="lista-icon-wrapper" [style.background-color]="lista.color || '#6554c0'">
+            <i [class]="obtenerClaseIcono(lista.icono)" class="icon-sidebar"></i>
+          </span>
+          <span>{{ lista.nombre }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="theme-toggle" (click)="toggleTheme()">
+      <i class="fas" [ngClass]="isLightMode ? 'fa-sun' : 'fa-moon'"></i>
+      <div class="theme-toggle-switch" [class.active]="isLightMode"></div>
+      <span class="theme-toggle-label">{{ isLightMode ? 'Claro' : 'Oscuro' }}</span>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="categoriaAEliminar" class="modal-overlay categoria-modal" (click)="cancelarEliminarCategoria()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3><i class="fas fa-exclamation-triangle"></i> Confirmar eliminación</h3>
+    </div>
+    <div class="modal-body">
+      <p>¿Estás seguro que deseas eliminar la categoría <strong>"{{ categoriaAEliminar.nombre }}"</strong>?</p>
+      <p class="advertencia">Esta acción también eliminará todas las listas y tareas asociadas y no se puede deshacer.</p>
+    </div>
+    <div class="modal-footer">
+      <button (click)="cancelarEliminarCategoria()" class="btn-cancelar">
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+      <button (click)="eliminarCategoria()" class="btn-confirmar-eliminar">
+        <i class="fas fa-trash"></i> Eliminar
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-modal-compartir
+  [isOpen]="modalCompartirAbierto"
+  [tipo]="tipoCompartir"
+  [itemId]="tipoCompartir === 'categoria' ? itemParaCompartir?.idCategoria : itemParaCompartir?.idLista"
+  [itemNombre]="itemParaCompartir?.nombre || ''"
+  [claveExistente]="itemParaCompartir?.claveCompartir || null"
+  (close)="cerrarModalCompartir()"
+  (compartido)="alCompartir($event)"
+>
+</app-modal-compartir>

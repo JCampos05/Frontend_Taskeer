@@ -1,0 +1,47 @@
+:host {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+}
+
+.vista-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+}
+
+.vista-header {
+    padding: 20px 32px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e1e4e8;
+    flex-shrink: 0;
+}
+
+.vista-header h2 {
+    margin: 0 0 4px 0;
+    font-size: 28px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    color: #172b4d;
+    gap: 12px;
+}
+
+.vista-header i {
+    font-size: 28px;
+    color: #505f79;
+}
+
+.subtitulo {
+    font-size: 14px;
+    color: #626f86;
+    margin: 0;
+    padding-left: 40px;
+}
+
+app-columnas {
+    flex: 1;
+    background-color: #f5f3f5;
+    min-height: 0;
+}

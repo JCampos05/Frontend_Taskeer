@@ -1,0 +1,50 @@
+<div class="configuracion-overlay" (click)="cerrarSiEsOverlay($event)">
+    <div class="configuracion-container" (click)="$event.stopPropagation()" (mousedown)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="configuracion-header">
+            <div class="header-content">
+                <div class="header-info">
+                    <i class="fas fa-cog"></i>
+                    <h1>Configuración</h1>
+                </div>
+                <button class="btn-cerrar" (click)="cerrar(); $event.stopPropagation()" title="Cerrar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenido -->
+        <div class="configuracion-content" (click)="$event.stopPropagation()">
+            <!-- Navegación de pestañas -->
+            <div class="tabs-navegacion">
+                <button class="tab-item" [class.activo]="seccionActiva === 'general'"
+                    (click)="cambiarSeccion('general'); $event.stopPropagation()">
+                    <i class="fas fa-user"></i>
+                    <span>Información General</span>
+                </button>
+                <button class="tab-item" [class.activo]="seccionActiva === 'redes'" 
+                    (click)="cambiarSeccion('redes'); $event.stopPropagation()">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Redes Sociales</span>
+                </button>
+                <button class="tab-item" [class.activo]="seccionActiva === 'seguridad'"
+                    (click)="cambiarSeccion('seguridad'); $event.stopPropagation()">
+                    <i class="fas fa-lock"></i>
+                    <span>Seguridad</span>
+                </button>
+            </div>
+
+            <!-- Contenido de las secciones -->
+            <div class="tabs-contenido" (click)="$event.stopPropagation()">
+                <!-- Sección: Información General -->
+                <app-general *ngIf="seccionActiva === 'general'"></app-general>
+
+                <!-- Sección: Redes Sociales -->
+                <app-redes-sociales *ngIf="seccionActiva === 'redes'"></app-redes-sociales>
+
+                <!-- Sección: Seguridad -->
+                <app-seguridad *ngIf="seccionActiva === 'seguridad'"></app-seguridad>
+            </div>
+        </div>
+    </div>
+</div>

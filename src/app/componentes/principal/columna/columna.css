@@ -1,0 +1,303 @@
+/* Control de vista (arriba del contenido) */
+.vista-controls {
+  padding: 12px 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background: #f4f5f7;
+}
+
+.btn-vista-toggle {
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+  background: white;
+  border: 1px solid #dfe1e6;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+  color: #42526e;
+}
+
+.btn-vista-toggle:hover {
+  background: #f4f5f7;
+  color: #0052cc;
+  border-color: #0052cc;
+  transform: scale(1.05);
+}
+
+.btn-vista-toggle:active {
+  transform: scale(0.95);
+}
+
+.btn-vista-toggle i {
+  font-size: 14px;
+}
+
+/* CONTENEDOR PRINCIPAL - Grid de 3 columnas */
+#contentArea {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px;
+  height: calc(100vh - 200px);
+  overflow-x: auto;
+}
+
+/* COLUMNA INDIVIDUAL */
+.columna {
+  background: #f8f9fa;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  min-width: 280px;
+  max-height: 100%;
+}
+
+.columna-header {
+  padding: 16px 20px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #172b4d;
+  border-bottom: 2px solid #e4e6ea;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border-radius: 12px 12px 0 0;
+}
+
+.btn-agregar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: #0052cc;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.btn-agregar:hover:not(:disabled) {
+  background: #0747a6;
+  transform: scale(1.05);
+}
+
+.btn-agregar:disabled {
+  background: #dfe1e6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* CONTENIDO DE LA COLUMNA - Modo Card */
+.columna-content {
+  padding: 16px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100% - 60px);
+}
+
+/* CONTENIDO DE LA COLUMNA - Modo Lista */
+.columna-content-lista {
+  gap: 4px;
+  padding: 12px;
+}
+
+.columna-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.columna-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.columna-content::-webkit-scrollbar-thumb {
+  background: #c1c7d0;
+  border-radius: 4px;
+}
+
+.columna-content::-webkit-scrollbar-thumb:hover {
+  background: #a5adba;
+}
+
+.sin-tareas {
+  text-align: center;
+  color: #7a869a;
+  padding: 40px 20px;
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* BOTÓN FLOTANTE */
+.btn-flotante {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #0052cc;
+  color: white;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  z-index: 1000;
+}
+
+.btn-flotante:hover:not(:disabled) {
+  background: #0747a6;
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 82, 204, 0.5);
+}
+
+.btn-flotante:disabled {
+  background: #dfe1e6;
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+/* DRAG & DROP STYLES */
+.cdk-drag-preview {
+  opacity: 0.8;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.4;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.columna-content.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* RESPONSIVE - TABLETS */
+@media (max-width: 1024px) {
+  #contentArea {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .columna {
+    min-width: 250px;
+  }
+
+  .btn-flotante {
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+  
+  .vista-controls {
+    padding: 10px 16px;
+  }
+  
+  .btn-vista-toggle {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* RESPONSIVE - MÓVILES */
+@media (max-width: 768px) {
+  #contentArea {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px;
+    height: auto;
+    overflow-x: visible;
+  }
+
+  .columna {
+    min-width: 100%;
+    max-height: 400px;
+  }
+
+  .columna-header {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .btn-agregar {
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+  }
+
+  .btn-flotante {
+    bottom: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+  }
+
+  .columna-content {
+    padding: 12px;
+    gap: 8px;
+  }
+  
+  .columna-content-lista {
+    gap: 4px;
+    padding: 8px;
+  }
+  
+  .vista-controls {
+    padding: 8px 12px;
+  }
+  
+  .btn-vista-toggle {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* MÓVILES PEQUEÑOS */
+@media (max-width: 480px) {
+  #contentArea {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .columna {
+    min-width: 100%;
+    max-height: 350px;
+  }
+
+  .columna-header {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .columna-content {
+    padding: 8px;
+  }
+  
+  .columna-content-lista {
+    padding: 6px;
+  }
+}

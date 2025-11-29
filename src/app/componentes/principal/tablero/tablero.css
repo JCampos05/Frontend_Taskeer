@@ -1,0 +1,341 @@
+/* Estilos globales del body y html */
+body, html {
+  margin: 0;
+  padding: 0;
+  background: #f4f5f7;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+#contentArea {
+  display: flex;
+  height: calc(100vh - 60px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 16px;
+  padding: 24px 20px;
+  background: #f4f5f7;
+  margin: 0;
+}
+
+#contentArea::-webkit-scrollbar {
+  height: 10px;
+}
+
+#contentArea::-webkit-scrollbar-track {
+  background: #ebecf0;
+  border-radius: 5px;
+}
+
+#contentArea::-webkit-scrollbar-thumb {
+  background: rgba(9, 30, 66, 0.2);
+  border-radius: 5px;
+}
+
+#contentArea::-webkit-scrollbar-thumb:hover {
+  background: rgba(9, 30, 66, 0.35);
+}
+
+.columna {
+  min-width: 300px;
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: #ebecf0;
+  border-radius: 12px;
+  height: fit-content;
+  max-height: calc(100vh - 120px);
+  box-shadow: 0 1px 3px rgba(9, 30, 66, 0.12);
+}
+
+.columna-header {
+  padding: 14px 16px;
+  font-weight: 600;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  color: #44546f;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  background: #ebecf0;
+  border-radius: 12px 12px 0 0;
+  border-bottom: 1px solid #dfe1e6;
+}
+
+/* Botón de alternancia de vista */
+.btn-vista-toggle {
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.6);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+  color: #44546f;
+}
+
+.btn-vista-toggle:hover {
+  background: rgba(255, 255, 255, 0.9);
+  color: #0052cc;
+  transform: scale(1.05);
+}
+
+.btn-vista-toggle:active {
+  transform: scale(0.95);
+}
+
+.btn-vista-toggle i {
+  font-size: 14px;
+}
+
+.btn-agregar {
+  width: 32px;
+  height: 32px;
+  font-size: 22px;
+  background: rgba(255, 255, 255, 0.6);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+  color: #44546f;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.btn-agregar:hover {
+  background: rgba(255, 255, 255, 0.9);
+  color: #172b4d;
+  transform: scale(1.05);
+}
+
+.btn-agregar:active {
+  transform: scale(0.95);
+}
+
+.columna-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+  min-height: 120px;
+  background: #ebecf0;
+  border-radius: 0 0 12px 12px;
+}
+
+.columna-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.columna-content::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.columna-content::-webkit-scrollbar-thumb {
+  background: rgba(9, 30, 66, 0.15);
+  border-radius: 4px;
+}
+
+.columna-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(9, 30, 66, 0.3);
+}
+
+.sin-tareas {
+  padding: 32px 16px;
+  color: #626f86;
+  text-align: center;
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.6;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  margin: 4px;
+  border: 2px dashed #c1c7d0;
+}
+
+.btn-flotante {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0052cc 0%, #0065ff 100%);
+  color: white;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 82, 204, 0.4);
+  transition: all 0.3s ease;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 300;
+}
+
+.btn-flotante:hover {
+  transform: scale(1.1) rotate(90deg);
+  background: linear-gradient(135deg, #0065ff 0%, #0747a6 100%);
+  box-shadow: 0 8px 24px rgba(0, 82, 204, 0.5);
+}
+
+.btn-flotante:active {
+  transform: scale(1.05) rotate(90deg);
+}
+
+/* Efectos de arrastrar y soltar */
+.cdk-drag-preview {
+  box-shadow: 0 10px 30px rgba(9, 30, 66, 0.3);
+  opacity: 0.95;
+  transform: rotate(3deg);
+  border-radius: 8px;
+  background: white;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+  background: rgba(9, 30, 66, 0.08);
+  border: 2px dashed #6b778c;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.cdk-drag-animating {
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.columna-content.cdk-drop-list-dragging .app-tarea-card:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.columna-content.cdk-drop-list-receiving {
+  background: rgba(0, 82, 204, 0.05);
+  border-radius: 0 0 12px 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #contentArea {
+    padding: 16px 12px;
+    gap: 12px;
+  }
+
+  .columna {
+    min-width: 280px;
+    width: 280px;
+  }
+}
+
+/* Layout específico para tablero */
+.tablero-layout {
+  display: flex;
+  gap: 16px;
+}
+
+.tablero-layout .columna-today {
+  min-width: 300px;
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.tablero-layout .columna-principal {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #ebecf0;
+  border-radius: 12px;
+  max-height: calc(100vh - 120px);
+  box-shadow: 0 1px 3px rgba(9, 30, 66, 0.12);
+}
+
+/* Vista de tarjetas (grid) */
+.columna-content-full {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+  background: #ebecf0;
+  border-radius: 0 0 12px 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 8px;
+  align-content: start;
+}
+
+.columna-content-full::-webkit-scrollbar {
+  width: 8px;
+}
+
+.columna-content-full::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.columna-content-full::-webkit-scrollbar-thumb {
+  background: rgba(9, 30, 66, 0.15);
+  border-radius: 4px;
+}
+
+.columna-content-full::-webkit-scrollbar-thumb:hover {
+  background: rgba(9, 30, 66, 0.3);
+}
+
+.columna-content-full .sin-tareas {
+  grid-column: 1 / -1;
+}
+
+/* Vista de lista (vertical) */
+.columna-content-lista {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+  background: #ebecf0;
+  border-radius: 0 0 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-content: start;
+}
+
+.columna-content-lista::-webkit-scrollbar {
+  width: 8px;
+}
+
+.columna-content-lista::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.columna-content-lista::-webkit-scrollbar-thumb {
+  background: rgba(9, 30, 66, 0.15);
+  border-radius: 4px;
+}
+
+.columna-content-lista::-webkit-scrollbar-thumb:hover {
+  background: rgba(9, 30, 66, 0.3);
+}
+
+@media (max-width: 768px) {
+  .tablero-layout .columna-today {
+    min-width: 280px;
+    width: 280px;
+  }
+  
+  .columna-content-full {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,44 @@
+<div class="nota-card" [style.background-color]="nota.color" (click)="cerrarMenu()">
+    
+    <!-- Header de la nota -->
+    <div class="nota-header">
+        <!-- Solo círculo izquierdo -->
+        <div class="circulo-perforacion"></div>
+        
+        <div class="acciones-header">
+            <!-- Botón de fijar -->
+            <button 
+                class="btn-fijar"
+                [class.active]="nota.fijada" 
+                (click)="onToggleFijar($event)" 
+                [title]="nota.fijada ? 'Desfijar' : 'Fijar'">
+                <i class="bi" [class.bi-pin-angle]="!nota.fijada" [class.bi-pin-angle-fill]="nota.fijada"></i>
+                <i class="fa-solid fa-thumbtack"></i>
+            </button>
+
+            <!-- Botón de menú -->
+            <button class="btn-menu" (click)="toggleMenu($event)" title="Más opciones">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+        </div>
+
+        <!-- Menú desplegable -->
+        <div class="menu-opciones" *ngIf="menuAbierto" (click)="$event.stopPropagation()">
+            <button (click)="onEditar($event)" type="button" class="menu-item">
+                <i class="fas fa-pen"></i>
+                <span>Editar</span>
+            </button>
+            <button (click)="onEliminar($event)" type="button" class="menu-item eliminar">
+                <i class="fas fa-trash"></i>
+                <span>Eliminar</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Contenido de la nota -->
+    <div class="nota-body" (click)="onEditar($event)">
+        <h3 class="nota-titulo" *ngIf="nota.titulo">{{ nota.titulo }}</h3>
+        <p class="nota-contenido" *ngIf="nota.contenido">{{ nota.contenido }}</p>
+        <p class="nota-vacia" *ngIf="!nota.titulo && !nota.contenido">Nota vacía</p>
+    </div>
+</div>

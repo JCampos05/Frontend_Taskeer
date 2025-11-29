@@ -1,0 +1,123 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="cerrar()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h3>
+                <i class="fas fa-users"></i>
+                Gestión de usuarios
+            </h3>
+            <button class="btn-close" (click)="cerrar()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <!-- Sección: Invitar usuario -->
+            <div class="seccion-invitar" *ngIf="esPropietario || esAdmin">
+                <h4>
+                    <i class="fas fa-envelope"></i>
+                    Invitar usuario
+                </h4>
+                <div class="form-invitar">
+                    <input type="email" [(ngModel)]="emailInvitar" placeholder="email@ejemplo.com" class="input-email">
+                    <select [(ngModel)]="rolInvitar" class="select-rol">
+                        <option value="admin">
+                            <i class="fas fa-crown"></i> Admin
+                        </option>
+                        <option value="editor">
+                            <i class="fas fa-pencil-alt"></i>Editor
+                        </option>
+                        <option value="colaborador">
+                            <i class="fas fa-pen"></i> Colaborador
+                        </option>
+                        <option value="lector">
+                            <i class="fas fa-eye"></i> Lector
+                        </option>
+                    </select>
+                    <button class="btn-invitar" (click)="invitarUsuario()" [disabled]="loadingInvitar">
+                        <i class="fas" [class.fa-spinner]="loadingInvitar" [class.fa-paper-plane]="!loadingInvitar"></i>
+                        {{ loadingInvitar ? 'Enviando...' : 'Invitar' }}
+                    </button>
+                </div>
+                <div class="info-roles">
+                    <div class="rol-info">
+                        <i class="fas fa-crown"></i>
+                        <strong>Admin:</strong> gestiona usuarios y permisos
+                    </div>
+                    <div class="rol-info"> 
+                        <i class="fas fa-pencil-alt"></i>
+                        <strong>Editor:</strong> edita y elimina tareas
+                    </div>
+                    <div class="rol-info">
+                        <i class="fas fa-pen"></i>
+                        <strong>Colaborador:</strong> edita tareas
+                    </div>
+                    <div class="rol-info">
+                        <i class="fas fa-eye"></i>
+                        <strong>Lector:</strong> solo visualiza
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección: Clave de compartir -->
+            <div class="seccion-clave" *ngIf="infoCompartidos?.lista?.claveCompartir">
+                <h4>
+                    <i class="fas fa-key"></i>
+                    Clave de acceso rápido
+                </h4>
+                <div class="clave-container">
+                    <code class="clave">{{ infoCompartidos?.lista?.claveCompartir }}</code>
+                    <button class="btn-copiar" (click)="copiarClave()">
+                        <i class="fas" [class.fa-check]="copiado" [class.fa-copy]="!copiado"></i>
+                        {{ copiado ? 'Copiado' : 'Copiar' }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sección: Lista de usuarios -->
+            <div class="seccion-usuarios">
+                <h4>
+                    <i class="fas fa-users"></i>
+                    Usuarios con acceso ({{ infoCompartidos?.totalUsuarios || 0 }})
+                </h4>
+
+                <div class="lista-usuarios"
+                    *ngIf="infoCompartidos && infoCompartidos.usuarios && infoCompartidos.usuarios.length > 0">
+                    <div class="usuario-item" *ngFor="let usuario of infoCompartidos.usuarios">
+                        <div class="usuario-info">
+                            <div class="usuario-avatar">
+                                {{ obtenerIniciales(usuario.nombre) }}
+                            </div>
+                            <div class="usuario-datos">
+                                <strong>{{ usuario.nombre }}</strong>
+                                <span class="usuario-email">{{ usuario.email }}</span>
+                                <span class="badge-creador" *ngIf="usuario.esCreador">
+                                    <i class="fas fa-crown"></i>
+                                    Propietario
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="usuario-acciones" *ngIf="!usuario.esCreador && (esPropietario || esAdmin)">
+                            <select [(ngModel)]="usuario.rol" (change)="onRolChange(usuario, usuario.rol)"
+                                class="select-rol-small">
+                                <option value="admin">Admin</option>
+                                <option value="editor">Editor</option>
+                                <option value="colaborador">Colaborador</option>
+                                <option value="lector">Lector</option>
+                            </select>
+                            <button class="btn-revocar" (click)="revocarAcceso(usuario)" title="Revocar acceso">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="no-usuarios"
+                    *ngIf="!infoCompartidos || !infoCompartidos.usuarios || infoCompartidos.usuarios.length === 0">
+                    <i class="fas fa-info-circle"></i>
+                    No hay usuarios compartidos aún.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,119 @@
+<div class="vista-container">
+    <div class="vista-header">
+        <div class="header-left">
+            <h2><i class="fas fa-users"></i> Listas compartidas</h2>
+            <p>Listas que estás compartiendo y listas compartidas contigo</p>
+        </div>
+        <button class="btn-nuevo" (click)="abrirModalUnirse()">
+            <i class="fas fa-plus"></i> Unirse a lista
+        </button>
+    </div>
+
+    <!-- Estado de carga -->
+    <div *ngIf="isLoading" class="loading-state">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Cargando listas compartidas...</p>
+    </div>
+
+    <!-- Mensaje de error -->
+    <div *ngIf="errorMessage && !isLoading" class="error-state">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>{{ errorMessage }}</p>
+        <button (click)="recargarListas()" class="btn-retry">
+            <i class="fas fa-redo"></i> Reintentar
+        </button>
+    </div>
+
+    <!-- Grid de listas -->
+    <div *ngIf="!isLoading && !errorMessage" class="listas-grid">
+        <div *ngFor="let lista of listas" class="lista-card">
+            <!-- Contenido clicable -->
+            <div class="lista-content" (click)="abrirLista(lista.idLista!)">
+                <div class="lista-icon" [style.background-color]="lista.color || '#f4f5f7'">
+                    <span *ngIf="esEmoji(lista.icono)" style="font-size: 24px;">
+                        {{ lista.icono }}
+                    </span>
+                    <i *ngIf="!esEmoji(lista.icono)" [class]="obtenerClaseIcono(lista.icono)"></i>
+                </div>
+                <div class="lista-info">
+                    <h3>{{ lista.nombre }}</h3>
+                    <span class="lista-categoria" *ngIf="lista.nombreCategoria">
+                        <i class="fas fa-folder"></i> {{ lista.nombreCategoria }}
+                    </span>
+                    <span class="lista-sin-categoria" *ngIf="!lista.nombreCategoria">
+                        <i class="fas fa-folder-open"></i> Sin categoría
+                    </span>
+                </div>
+                <!-- Badge según tipo -->
+                <div class="lista-badge compartiendo" *ngIf="lista.esPropietario">
+                    <i class="fas fa-crown"></i> Compartiendo
+                </div>
+                <div class="lista-badge compartida" *ngIf="!lista.esPropietario">
+                    <i class="fas fa-share-alt"></i> Compartida
+                </div>
+            </div>
+
+            <!-- Acciones -->
+            <div class="lista-acciones">
+                <!-- Botón diferente según si es propietario o no -->
+                <button 
+                    *ngIf="lista.esPropietario"
+                    (click)="salirDeLista($event, lista)" 
+                    class="btn-accion btn-descompartir" 
+                    title="Descompartir esta lista">
+                    <i class="fas fa-unlink"></i>
+                </button>
+                <button 
+                    *ngIf="!lista.esPropietario"
+                    (click)="salirDeLista($event, lista)" 
+                    class="btn-accion btn-salir" 
+                    title="Salir de esta lista">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sin listas compartidas -->
+        <div *ngIf="listas.length === 0" class="sin-listas">
+            <i class="fas fa-user-friends"></i>
+            <p>No tienes listas compartidas</p>
+            <small>Comparte tus listas o únete a listas de otros usuarios</small>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación personalizado -->
+<div *ngIf="modalConfirmacion.abierto" class="modal-overlay" (click)="cerrarModalConfirmacion()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h3>
+                <i class="fas fa-exclamation-triangle"></i>
+                {{ modalConfirmacion.titulo }}
+            </h3>
+        </div>
+        <div class="modal-body">
+            <p>{{ modalConfirmacion.mensaje }}</p>
+            <p class="advertencia" *ngIf="modalConfirmacion.tipo === 'descompartir'">
+                Esta acción no se puede deshacer. Todos los usuarios perderán acceso a esta lista.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button (click)="cerrarModalConfirmacion()" class="btn-cancelar">
+                <i class="fas fa-times"></i> Cancelar
+            </button>
+            <button 
+                (click)="confirmarAccion()" 
+                [class]="modalConfirmacion.tipo === 'descompartir' ? 'btn-confirmar-eliminar' : 'btn-confirmar'">
+                <i [class]="modalConfirmacion.tipo === 'descompartir' ? 'fas fa-unlink' : 'fas fa-sign-out-alt'"></i>
+                {{ modalConfirmacion.tipo === 'descompartir' ? 'Descompartir' : 'Salir' }}
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para unirse a lista -->
+<app-modal-unirse
+    [isOpen]="modalUnirseAbierto"
+    (close)="cerrarModalUnirse()"
+    (unido)="alUnirse()">
+</app-modal-unirse>

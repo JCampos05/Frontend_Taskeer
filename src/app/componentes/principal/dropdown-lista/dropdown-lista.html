@@ -1,0 +1,35 @@
+<div class="dropdown-lista-container">
+    <div class="dropdown-selected" (click)="toggleDropdown()" [class.abierto]="abierto">
+        <div class="selected-content" *ngIf="listaSeleccionada; else sinSeleccion">
+            <span *ngIf="esEmoji(listaSeleccionada.icono)" class="lista-emoji">
+                {{ listaSeleccionada.icono }}
+            </span>
+            <span *ngIf="!esEmoji(listaSeleccionada.icono)" class="lista-icon-wrapper"
+                [style.background-color]="listaSeleccionada.color || '#6554c0'">
+                <i [class]="obtenerClaseIcono(listaSeleccionada.icono)"></i>
+            </span>
+            <span class="lista-nombre">{{ listaSeleccionada.nombre }}</span>
+        </div>
+        <ng-template #sinSeleccion>
+            <span class="placeholder">{{ placeholder }}</span>
+        </ng-template>
+        <i class="fas fa-chevron-down dropdown-arrow" [class.rotado]="abierto"></i>
+    </div>
+
+    <div class="dropdown-opciones" *ngIf="abierto">
+        <div class="dropdown-opcion" (click)="seleccionarLista(null)">
+            <span class="lista-nombre">Sin lista</span>
+        </div>
+        <div class="dropdown-opcion" *ngFor="let lista of listas" (click)="seleccionarLista(lista.idLista!)"
+            [class.seleccionado]="valorSeleccionado === lista.idLista">
+            <span *ngIf="esEmoji(lista.icono)" class="lista-emoji">
+                {{ lista.icono }}
+            </span>
+            <span *ngIf="!esEmoji(lista.icono)" class="lista-icon-wrapper"
+                [style.background-color]="lista.color || '#6554c0'">
+                <i [class]="obtenerClaseIcono(lista.icono)"></i>
+            </span>
+            <span class="lista-nombre">{{ lista.nombre }}</span>
+        </div>
+    </div>
+</div>

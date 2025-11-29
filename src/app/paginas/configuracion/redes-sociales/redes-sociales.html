@@ -1,0 +1,91 @@
+<div class="seccion-card">
+    <div class="seccion-header">
+        <h2>
+            <i class="fas fa-share-nodes"></i>
+            Redes Sociales
+        </h2>
+        <p class="seccion-descripcion">Conecta tus perfiles de redes sociales</p>
+    </div>
+
+    <form [formGroup]="formRedes" (ngSubmit)="guardarRedesSociales()">
+        <div class="redes-grid">
+            <!-- LinkedIn -->
+            <div class="red-item linkedin">
+                <div class="red-icon">
+                    <i class="fab fa-linkedin"></i>
+                </div>
+                <div class="red-info">
+                    <label>LinkedIn</label>
+                    <input type="url" formControlName="linkedin" placeholder="https://linkedin.com/in/..." />
+                </div>
+            </div>
+
+            <!-- GitHub -->
+            <div class="red-item github">
+                <div class="red-icon">
+                    <i class="fab fa-github"></i>
+                </div>
+                <div class="red-info">
+                    <label>GitHub</label>
+                    <input type="url" formControlName="github" placeholder="https://github.com/..." />
+                </div>
+            </div>
+
+            <!-- Twitter -->
+            <div class="red-item twitter">
+                <div class="red-icon">
+                    <i class="fab fa-twitter"></i>
+                </div>
+                <div class="red-info">
+                    <label>Twitter</label>
+                    <input type="url" formControlName="twitter" placeholder="https://twitter.com/..." />
+                </div>
+            </div>
+
+            <!-- YouTube -->
+            <div class="red-item youtube">
+                <div class="red-icon">
+                    <i class="fab fa-youtube"></i>
+                </div>
+                <div class="red-info">
+                    <label>YouTube</label>
+                    <input type="url" formControlName="youtube" placeholder="https://youtube.com/@..." />
+                </div>
+            </div>
+
+            <!-- Reddit -->
+            <div class="red-item reddit">
+                <div class="red-icon">
+                    <i class="fab fa-reddit"></i>
+                </div>
+                <div class="red-info">
+                    <label>Reddit</label>
+                    <input type="url" formControlName="reddit" placeholder="https://reddit.com/u/..." />
+                </div>
+            </div>
+
+            <!-- Instagram -->
+            <div class="red-item instagram">
+                <div class="red-icon">
+                    <i class="fab fa-instagram"></i>
+                </div>
+                <div class="red-info">
+                    <label>Instagram</label>
+                    <input type="url" formControlName="instagram" placeholder="https://instagram.com/..." />
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="form-actions">
+            <button type="button" class="btn-secundario" (click)="cancelarCambios()">
+                <i class="fas fa-times"></i>
+                Cancelar
+            </button>
+            <button type="submit" class="btn-primario" [disabled]="guardandoRedes || formRedes.invalid">
+                <i class="fas fa-save"></i>
+                {{ guardandoRedes ? 'Guardando...' : 'Guardar cambios' }}
+            </button>
+        </div>
+    </form>
+</div>

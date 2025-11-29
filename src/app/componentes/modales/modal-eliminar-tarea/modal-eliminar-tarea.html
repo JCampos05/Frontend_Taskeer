@@ -1,0 +1,38 @@
+<div class="modal-backdrop" *ngIf="mostrar" (click)="onBackdropClick($event)">
+    <div class="modal-container">
+        <!-- Header -->
+        <div class="modal-header">
+            <i class="fas fa-exclamation-triangle modal-icon"></i>
+            <h3 class="modal-titulo">
+                {{ tipoEliminacion === 'lista' ? 'Confirmar eliminación' : 'Eliminar tarea' }}
+            </h3>
+        </div>
+
+        <!-- Contenido -->
+        <div class="modal-body">
+            <p class="modal-pregunta">
+                ¿Estás seguro que deseas eliminar
+                {{ tipoEliminacion === 'lista' ? 'la lista' : 'la tarea' }}
+                <strong>"{{ nombreTarea }}"</strong>?
+            </p>
+
+            <!-- Advertencia adicional para listas -->
+            <div class="modal-advertencia" *ngIf="tipoEliminacion === 'lista'">
+                <i class="fas fa-info-circle"></i>
+                <span>Esta acción también eliminará todas las tareas asociadas y no se puede deshacer.</span>
+            </div>
+        </div>
+
+        <!-- Footer con botones -->
+        <div class="modal-footer">
+            <button class="btn-cancelar" (click)="onCancelar()">
+                <i class="fas fa-times"></i>
+                Cancelar
+            </button>
+            <button class="btn-eliminar" (click)="onConfirmar()">
+                <i class="fas fa-trash-alt"></i>
+                Eliminar
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,127 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="cerrar()">
+    <div class="modal-content-large" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>
+                <i class="fas fa-user-check"></i>
+                Asignar Tarea a Usuario
+            </h2>
+            <button class="btn-cerrar" (click)="cerrar()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="modal-body-dual">
+            <!-- Estado de carga -->
+            <div class="loading-state-full" *ngIf="cargando">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Cargando información...</p>
+            </div>
+
+            <!-- Contenido principal -->
+            <div class="dual-panel" *ngIf="!cargando">
+                <!-- Panel izquierdo: Usuarios -->
+                <div class="panel-section">
+                    <h3><i class="fas fa-users"></i> Usuarios Disponibles</h3>
+                    
+                    <div class="empty-state-mini" *ngIf="!hayUsuariosDisponibles()">
+                        <i class="fas fa-users-slash"></i>
+                        <p>No hay usuarios disponibles</p>
+                        <small>Comparte la lista primero</small>
+                    </div>
+
+                    <div class="usuarios-grid" *ngIf="hayUsuariosDisponibles()">
+                        <div class="usuario-item-compact" 
+                             *ngFor="let usuario of usuarios"
+                             [class.seleccionado]="usuarioSeleccionado === usuario.idUsuario"
+                             (click)="seleccionarUsuario(usuario)">
+                            <div class="usuario-avatar">
+                                {{ obtenerIniciales(usuario.nombre) }}
+                            </div>
+                            <div class="usuario-info-compact">
+                                <div class="usuario-nombre">{{ usuario.nombre }}</div>
+                                <div class="usuario-email">{{ usuario.email }}</div>
+                            </div>
+                            <div class="check-icon" *ngIf="usuarioSeleccionado === usuario.idUsuario">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel derecho: Tareas -->
+                <div class="panel-section">
+                    <h3><i class="fas fa-tasks"></i> Tareas de la Lista</h3>
+                    
+                    <div class="empty-state-mini" *ngIf="tareas.length === 0">
+                        <i class="fas fa-inbox"></i>
+                        <p>No hay tareas en esta lista</p>
+                    </div>
+
+                    <div class="tareas-grid" *ngIf="tareas.length > 0">
+                        <div class="tarea-item-compact" 
+                             *ngFor="let tarea of tareas"
+                             [class.seleccionado]="tareaSeleccionada?.idTarea === tarea.idTarea"
+                             [class.asignada]="tarea.idUsuarioAsignado"
+                             (click)="seleccionarTarea(tarea)">
+                            <div class="tarea-checkbox">
+                                <i class="fas fa-circle" *ngIf="tareaSeleccionada?.idTarea !== tarea.idTarea"></i>
+                                <i class="fas fa-check-circle" *ngIf="tareaSeleccionada?.idTarea === tarea.idTarea"></i>
+                            </div>
+                            <div class="tarea-info-compact">
+                                <div class="tarea-nombre">{{ tarea.nombre }}</div>
+                                <div class="tarea-meta">
+                                    <span class="estado-badge" [ngClass]="'estado-' + tarea.estado">
+                                        <ng-container *ngIf="tarea.estado === 'P'">Pendiente</ng-container>
+                                        <ng-container *ngIf="tarea.estado === 'N'">En Proceso</ng-container>
+                                        <ng-container *ngIf="tarea.estado === 'C'">Completada</ng-container>
+                                    </span>
+                                    <span class="usuario-badge" *ngIf="tarea.nombreUsuarioAsignado">
+                                        <i class="fas fa-user"></i> {{ tarea.nombreUsuarioAsignado }}
+                                    </span>
+                                    <span class="sin-asignar" *ngIf="!tarea.nombreUsuarioAsignado">
+                                        Sin asignar
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumen de selección -->
+            <div class="seleccion-resumen" *ngIf="!cargando && (usuarioSeleccionado || tareaSeleccionada)">
+                <div class="resumen-item" *ngIf="usuarioSeleccionado">
+                    <strong>Usuario:</strong> 
+                    <ng-container *ngIf="obtenerUsuarioSeleccionado() as usuario">
+                        {{ usuario.nombre }}
+                    </ng-container>
+                </div>
+                <div class="resumen-item" *ngIf="tareaSeleccionada">
+                    <strong>Tarea:</strong> {{ tareaSeleccionada.nombre }}
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-secondary" (click)="cerrar()" [disabled]="procesando">
+                <i class="fas fa-times"></i>
+                Cancelar
+            </button>
+
+            <button *ngIf="tareaSeleccionada?.idUsuarioAsignado" 
+                    class="btn-desasignar" 
+                    (click)="desasignar()"
+                    [disabled]="procesando">
+                <i class="fas fa-user-times"></i>
+                {{ procesando ? 'Desasignando...' : 'Desasignar' }}
+            </button>
+
+            <button class="btn-primary" 
+                    (click)="asignar()"
+                    [disabled]="!usuarioSeleccionado || !tareaSeleccionada || procesando">
+                <i class="fas fa-check"></i>
+                {{ procesando ? 'Asignando...' : 'Asignar' }}
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,200 @@
+<div
+  class="tarea-card"
+  [class.tarea-lista]="modoVista === 'lista'"
+  [attr.data-tarea-id]="tarea.idTarea"
+  [attr.data-estado]="tarea.estado"
+  cdkDragHandle
+  (click)="onCardClick($event)"
+>
+  <div class="tarea-content">
+    <!-- Badge de lista en esquina superior derecha (solo en modo card) -->
+    <span *ngIf="tarea.nombreLista && modoVista === 'card'" class="tarea-lista-badge">
+      <span *ngIf="esEmoji(tarea.iconoLista)" class="lista-emoji">{{ tarea.iconoLista }}</span>
+      <span
+        *ngIf="!esEmoji(tarea.iconoLista)"
+        class="lista-icon-wrapper"
+        [style.background-color]="tarea.colorLista || '#6554c0'"
+      >
+        <i [class]="obtenerClaseIcono(tarea.iconoLista)"></i>
+      </span>
+      {{ tarea.nombreLista }}
+      <i *ngIf="tarea.importante" class="fas fa-star estrella-importante"></i>
+    </span>
+
+    <div class="tarea-header">
+      <input
+        type="checkbox"
+        [checked]="tarea.estado === 'C'"
+        [disabled]="!puedeEditar"
+        (change)="onCheckboxChange($event)"
+        (click)="$event.stopPropagation()"
+        class="tarea-checkbox"
+      />
+
+      <div class="tarea-info" (click)="onTareaClick()">
+        <strong [class.tarea-completada]="tarea.estado === 'C'">
+          {{ tarea.nombre }}
+          <i *ngIf="tarea.prioridad === 'A'" class="fas fa-flag bandera-prioridad"></i>
+          <i *ngIf="estaVencida()" class="fas fa-exclamation-triangle icono-vencida"></i>
+        </strong>
+
+        <!-- Resto del código sin cambios -->
+        <p *ngIf="tarea.descripcion && modoVista === 'card'" class="tarea-descripcion">
+          {{ tarea.descripcion }}
+        </p>
+
+        <div class="tarea-metadata">
+          <span *ngIf="tarea.fechaVencimiento" class="tarea-fecha">
+            <i class="far fa-calendar"></i> {{ formatearFecha(tarea.fechaVencimiento) }}
+          </span>
+
+          <span *ngIf="tarea.nombreUsuarioAsignado" class="usuario-asignado-badge">
+            <div class="usuario-avatar-mini">
+              {{ obtenerIniciales(tarea.nombreUsuarioAsignado) }}
+            </div>
+            <span class="usuario-nombre-mini">{{ tarea.nombreUsuarioAsignado }}</span>
+          </span>
+
+          <!-- Badge de lista en modo lista (inline) -->
+          <span *ngIf="tarea.nombreLista && modoVista === 'lista'" class="tarea-lista-badge-inline">
+            <span *ngIf="esEmoji(tarea.iconoLista)" class="lista-emoji">{{
+              tarea.iconoLista
+            }}</span>
+            <span
+              *ngIf="!esEmoji(tarea.iconoLista)"
+              class="lista-icon-wrapper"
+              [style.background-color]="tarea.colorLista || '#6554c0'"
+            >
+              <i [class]="obtenerClaseIcono(tarea.iconoLista)"></i>
+            </span>
+            {{ tarea.nombreLista }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Botones compactos en modo lista -->
+      <div *ngIf="modoVista === 'lista'" class="tarea-acciones-inline">
+        <button
+          *ngIf="mostrarBotonIniciar"
+          (click)="cambiarEstado($event, 'N')"
+          class="btn-accion-icon"
+          title="Iniciar"
+        >
+          <i class="fas fa-play"></i>
+        </button>
+
+        <button
+          *ngIf="mostrarBotonesProceso"
+          (click)="cambiarEstado($event, 'P')"
+          class="btn-accion-icon"
+          title="Pausar"
+        >
+          <i class="fas fa-pause"></i>
+        </button>
+
+        <button
+          *ngIf="mostrarBotonesProceso"
+          (click)="cambiarEstado($event, 'C')"
+          class="btn-accion-icon"
+          title="Completar"
+        >
+          <i class="fas fa-check"></i>
+        </button>
+
+        <button
+          *ngIf="mostrarBotonReabrir"
+          (click)="cambiarEstado($event, 'P')"
+          class="btn-accion-icon"
+          title="Reabrir"
+        >
+          <i class="fas fa-redo"></i>
+        </button>
+
+        <button
+          *ngIf="puedeAsignar"
+          (click)="abrirModalAsignar($event)"
+          class="btn-accion-icon btn-asignar"
+          [title]="tarea.nombreUsuarioAsignado ? 'Reasignar tarea' : 'Asignar tarea'"
+        >
+          <i class="fas fa-user-plus"></i>
+        </button>
+
+        <button
+          *ngIf="puedeEditar"
+          (click)="alternarMiDia($event)"
+          class="btn-accion-icon"
+          [class.mi-dia-activo]="tarea.miDia"
+          [title]="tarea.miDia ? 'Quitar de Mi Día' : 'Agregar a Mi Día'"
+        >
+          <i class="fas fa-sun"></i>
+        </button>
+
+        <button
+          *ngIf="puedeEliminar"
+          (click)="eliminarTarea($event)"
+          class="btn-accion-icon btn-eliminar"
+          title="Eliminar tarea"
+        >
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Botones normales en modo card -->
+    <div *ngIf="modoVista === 'card'" class="tarea-acciones">
+      <button *ngIf="mostrarBotonIniciar" (click)="cambiarEstado($event, 'N')" class="btn-accion">
+        <i class="fas fa-play"></i> Iniciar
+      </button>
+
+      <button *ngIf="mostrarBotonesProceso" (click)="cambiarEstado($event, 'P')" class="btn-accion">
+        <i class="fas fa-pause"></i>
+      </button>
+
+      <button *ngIf="mostrarBotonesProceso" (click)="cambiarEstado($event, 'C')" class="btn-accion">
+        <i class="fas fa-check"></i>
+      </button>
+
+      <button *ngIf="mostrarBotonReabrir" (click)="cambiarEstado($event, 'P')" class="btn-accion">
+        <i class="fas fa-redo"></i> Reabrir
+      </button>
+
+      <button
+        *ngIf="puedeAsignar"
+        (click)="abrirModalAsignar($event)"
+        class="btn-accion btn-asignar"
+        [title]="tarea.nombreUsuarioAsignado ? 'Reasignar tarea' : 'Asignar tarea'"
+      >
+        <i class="fas fa-user-plus"></i>
+        {{ tarea.nombreUsuarioAsignado ? 'Reasignar' : 'Asignar' }}
+      </button>
+
+      <button
+        *ngIf="puedeEditar"
+        (click)="alternarMiDia($event)"
+        class="btn-accion"
+        [class.mi-dia-activo]="tarea.miDia"
+        [title]="tarea.miDia ? 'Quitar de Mi Día' : 'Agregar a Mi Día'"
+      >
+        <i class="fas fa-sun"></i>
+      </button>
+
+      <button
+        *ngIf="puedeEliminar"
+        (click)="eliminarTarea($event)"
+        class="btn-accion btn-eliminar"
+        title="Eliminar tarea"
+      >
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-modal-eliminar-tarea
+  [mostrar]="mostrarModalEliminar"
+  [nombreTarea]="tareaAEliminar?.nombre"
+  [tipoEliminacion]="'tarea'"
+  (confirmar)="confirmarEliminacion()"
+  (cancelar)="cancelarEliminacion()"
+>
+</app-modal-eliminar-tarea>

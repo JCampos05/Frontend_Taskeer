@@ -1,0 +1,612 @@
+/* ========== CARD PRINCIPAL ========== */
+.tarea-card {
+  background: white;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(9, 30, 66, 0.15);
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.tarea-card:hover {
+  box-shadow: 0 4px 12px rgba(9, 30, 66, 0.15);
+  transform: translateY(-2px);
+  background: #fafbfc;
+}
+
+/* ========== MODO LISTA (COMPACTO) ========== */
+.tarea-card.tarea-lista {
+  padding: 8px 12px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+}
+
+.tarea-card.tarea-lista:hover {
+  transform: translateY(0);
+}
+
+.tarea-card.tarea-lista .tarea-header {
+  padding-right: 0;
+  align-items: center;
+}
+
+.tarea-card.tarea-lista .tarea-info {
+  gap: 4px;
+}
+
+.tarea-card.tarea-lista .tarea-info strong {
+  font-size: 13px;
+}
+
+.tarea-card.tarea-lista .tarea-metadata {
+  margin-top: 0;
+}
+
+.tarea-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tarea-card.tarea-lista .tarea-content {
+  gap: 0;
+}
+
+/* ========== BADGE DE LISTA (ESQUINA SUPERIOR DERECHA) ========== */
+.tarea-lista-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: #f4f5f7;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #42526e;
+  font-weight: 500;
+  z-index: 1;
+  box-shadow: 0 1px 2px rgba(9, 30, 66, 0.08);
+}
+
+/* Badge de lista inline (modo lista) */
+.tarea-lista-badge-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  background: #f4f5f7;
+  border-radius: 3px;
+  font-size: 11px;
+  color: #42526e;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.estrella-importante {
+  color: #ffab00;
+  font-size: 12px;
+  margin-left: 2px;
+}
+
+.lista-emoji {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.tarea-lista-badge-inline .lista-emoji {
+  font-size: 12px;
+}
+
+.lista-icon-wrapper {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tarea-lista-badge-inline .lista-icon-wrapper {
+  width: 14px;
+  height: 14px;
+}
+
+.lista-icon-wrapper i {
+  font-size: 10px;
+  color: white;
+}
+
+.tarea-lista-badge-inline .lista-icon-wrapper i {
+  font-size: 8px;
+}
+
+/* ========== HEADER CON CHECKBOX E INFO ========== */
+.tarea-header {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding-right: 140px;
+}
+
+.tarea-card:not(:has(.tarea-lista-badge)) .tarea-header {
+  padding-right: 0;
+}
+
+.tarea-card.tarea-lista .tarea-header {
+  gap: 10px;
+  padding-right: 0;
+}
+
+/* ========== CHECKBOX PERSONALIZADO ========== */
+.tarea-checkbox {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
+  border: 2px solid #dfe1e6;
+  border-radius: 3px;
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  background: white;
+  align-self: flex-start;
+}
+
+.tarea-card.tarea-lista .tarea-checkbox {
+  width: 16px;
+  height: 16px;
+  align-self: center;
+}
+
+.tarea-checkbox:hover {
+  border-color: #0052cc;
+  background: #f4f5f7;
+}
+
+.tarea-checkbox:checked {
+  background: #00875a;
+  border-color: #00875a;
+}
+
+.tarea-checkbox:checked::after {
+  content: '\2713';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.tarea-card.tarea-lista .tarea-checkbox:checked::after {
+  font-size: 10px;
+}
+
+.tarea-checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background-color: #f4f5f7 !important;
+}
+
+.tarea-checkbox:disabled:hover {
+  border-color: #dfe1e6 !important;
+  background-color: #f4f5f7 !important;
+}
+
+/* ========== INFORMACIÓN DE LA TAREA ========== */
+.tarea-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tarea-info strong {
+  color: #172b4d;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  word-break: break-word;
+}
+
+.tarea-completada {
+  text-decoration: line-through;
+  color: #5e6c84 !important;
+  opacity: 0.7;
+}
+
+.prioridad-alta {
+  color: #ff5630;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.tarea-card.tarea-lista .prioridad-alta {
+  font-size: 12px;
+}
+
+.tarea-descripcion {
+  color: #5e6c84;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+/* ========== METADATA (FECHA Y USUARIO) ========== */
+.tarea-metadata {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.tarea-card.tarea-lista .tarea-metadata {
+  gap: 6px;
+  margin-top: 0;
+}
+
+.tarea-fecha {
+  color: #5e6c84;
+  font-size: 12px;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  background: #f4f5f7;
+  border-radius: 4px;
+  width: fit-content;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tarea-card.tarea-lista .tarea-fecha {
+  font-size: 11px;
+  padding: 3px 6px;
+  gap: 4px;
+}
+
+.tarea-fecha i {
+  color: #6554c0;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.tarea-card.tarea-lista .tarea-fecha i {
+  font-size: 11px;
+}
+
+/* ========== USUARIO ASIGNADO ========== */
+.usuario-asignado-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: #e3f2fd;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #1565c0;
+  font-weight: 500;
+  border: 1px solid #bbdefb;
+}
+
+.tarea-card.tarea-lista .usuario-asignado-badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  gap: 4px;
+}
+
+.usuario-avatar-mini {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #0052CC;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 9px;
+  flex-shrink: 0;
+}
+
+.tarea-card.tarea-lista .usuario-avatar-mini {
+  width: 18px;
+  height: 18px;
+  font-size: 8px;
+}
+
+.usuario-nombre-mini {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+.tarea-card.tarea-lista .usuario-nombre-mini {
+  max-width: 80px;
+}
+
+/* ========== BOTONES DE ACCIÓN (MODO CARD) ========== */
+.tarea-acciones {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.btn-accion {
+  padding: 6px 12px;
+  font-size: 12px;
+  border: 1px solid #dfe1e6;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+  color: #42526e;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.btn-accion i {
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.btn-accion:hover {
+  background: #f4f5f7;
+  border-color: #b3bac5;
+  color: #172b4d;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(9, 30, 66, 0.1);
+}
+
+.btn-accion:hover i {
+  transform: scale(1.1);
+}
+
+.btn-accion:active {
+  background: #ebecf0;
+  transform: translateY(0);
+}
+
+/* ========== BOTONES DE ACCIÓN INLINE (MODO LISTA) ========== */
+.tarea-acciones-inline {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.btn-accion-icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 11px;
+  border: 1px solid #dfe1e6;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #42526e;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.btn-accion-icon:hover {
+  background: #f4f5f7;
+  border-color: #b3bac5;
+  color: #172b4d;
+  transform: scale(1.05);
+}
+
+.btn-accion-icon:active {
+  background: #ebecf0;
+  transform: scale(0.95);
+}
+
+/* Botón Iniciar (Play) */
+.btn-accion:has(.fa-play),
+.btn-accion-icon:has(.fa-play) {
+  border-color: #0052cc;
+  color: #0052cc;
+}
+
+.btn-accion:has(.fa-play):hover,
+.btn-accion-icon:has(.fa-play):hover {
+  background: #deebff;
+  border-color: #0065ff;
+  color: #0065ff;
+}
+
+/* Botón Pausar */
+.btn-accion:has(.fa-pause),
+.btn-accion-icon:has(.fa-pause) {
+  border-color: #ff991f;
+  color: #ff991f;
+}
+
+.btn-accion:has(.fa-pause):hover,
+.btn-accion-icon:has(.fa-pause):hover {
+  background: #fff4e6;
+  border-color: #ff991f;
+}
+
+/* Botón Completar (Check) */
+.btn-accion:has(.fa-check),
+.btn-accion-icon:has(.fa-check) {
+  border-color: #00875a;
+  color: #00875a;
+}
+
+.btn-accion:has(.fa-check):hover,
+.btn-accion-icon:has(.fa-check):hover {
+  background: #e3fcef;
+  border-color: #00875a;
+}
+
+/* Botón Reabrir (Redo) */
+.btn-accion:has(.fa-redo),
+.btn-accion-icon:has(.fa-redo) {
+  border-color: #6554c0;
+  color: #6554c0;
+}
+
+.btn-accion:has(.fa-redo):hover,
+.btn-accion-icon:has(.fa-redo):hover {
+  background: #eae6ff;
+  border-color: #6554c0;
+}
+
+/* Botón Asignar */
+.btn-asignar {
+  border-color: #6554c0;
+  color: #6554c0;
+}
+
+.btn-asignar:hover {
+  background: #eae6ff;
+  border-color: #6554c0;
+}
+
+/* Botón Eliminar */
+.btn-eliminar {
+  background-color: transparent;
+  color: #de350b;
+  border: 1px solid transparent;
+}
+
+.btn-eliminar:hover {
+  background-color: #ffebe6;
+  border-color: #de350b;
+  color: #bf2600;
+}
+
+/* Botón Mi Día */
+.btn-accion.mi-dia-activo,
+.btn-accion-icon.mi-dia-activo {
+  background-color: #fff4e6;
+  color: #ff8c00;
+  border: 1px solid #ffd700;
+}
+
+.btn-accion.mi-dia-activo:hover,
+.btn-accion-icon.mi-dia-activo:hover {
+  background-color: #ffe4b3;
+}
+
+/* ========== COLORES POR ESTADO ========== */
+.tarea-card[data-estado="P"] {
+  border-left-color: #6554c0;
+}
+
+.tarea-card[data-estado="N"] {
+  border-left-color: #0052cc;
+}
+
+.tarea-card[data-estado="C"] {
+  border-left-color: #00875a;
+  opacity: 0.85;
+}
+
+.tarea-card[data-estado="C"]:hover {
+  opacity: 1;
+}
+
+/* ========== ESTADO DE ARRASTRE (CDK) ========== */
+.tarea-card.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.tarea-card.cdk-drag-preview {
+  box-shadow: 0 8px 24px rgba(9, 30, 66, 0.25);
+  transform: rotate(3deg);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .tarea-card {
+    padding: 10px;
+  }
+
+  .tarea-header {
+    padding-right: 100px;
+  }
+
+  .tarea-lista-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  .tarea-info strong {
+    font-size: 13px;
+  }
+
+  .tarea-descripcion {
+    font-size: 12px;
+  }
+
+  .btn-accion {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+  .usuario-nombre-mini {
+    max-width: 60px;
+  }
+
+  .btn-accion-icon {
+    width: 26px;
+    height: 26px;
+    font-size: 10px;
+  }
+}
+
+/* Bandera roja para tareas con prioridad alta */
+.bandera-prioridad {
+  color: #ff5630;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.tarea-card.tarea-lista .bandera-prioridad {
+  font-size: 12px;
+}
+
+/* Icono de advertencia para tareas vencidas */
+.icono-vencida {
+  color: #ff991f;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.tarea-card.tarea-lista .icono-vencida {
+  font-size: 12px;
+}

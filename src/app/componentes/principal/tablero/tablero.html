@@ -1,0 +1,42 @@
+<div id="contentArea" class="tablero-layout">
+  <div class="columna columna-principal">
+    <!-- Header con título y botón de vista -->
+    <div class="columna-header">
+      <span>{{ tituloColumna }}</span>
+      <button 
+        class="btn-vista-toggle" 
+        (click)="alternarModoVista()"
+        [title]="modoVista === 'card' ? 'Cambiar a vista de lista' : 'Cambiar a vista de tarjetas'">
+        <i *ngIf="modoVista === 'card'" class="fas fa-list"></i>
+        <i *ngIf="modoVista === 'lista'" class="fas fa-th-large"></i>
+      </button>
+    </div>
+
+    <div 
+      [class]="modoVista === 'card' ? 'columna-content-full' : 'columna-content-lista'"
+      id="tareasColumna"
+      cdkDropList
+      [cdkDropListData]="tareasColumna"
+      (cdkDropListDropped)="onDrop($event)">
+      <p *ngIf="tareasColumna.length === 0" class="sin-tareas">Sin tareas</p>
+      <app-tarea-card 
+        *ngFor="let tarea of tareasColumna" 
+        [tarea]="tarea"
+        [modoVista]="modoVista"
+        cdkDrag
+        (tareaClick)="abrirPanelDetalles(tarea.idTarea!)"
+        (estadoCambiado)="onEstadoCambiado()"
+        (tareaEliminada)="onTareaEliminada()">
+      </app-tarea-card>
+    </div>
+  </div>
+</div>
+
+<app-panel-detalles 
+  [abierto]="panelAbierto"
+  [idTarea]="tareaSeleccionada"
+  (cerrar)="cerrarPanelDetalles()"
+  (tareaGuardada)="onTareaGuardada()">
+</app-panel-detalles>
+
+<button class="btn-flotante" (click)="abrirPanelDetalles()">+</button>

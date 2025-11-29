@@ -1,0 +1,99 @@
+<div id="header">
+  <div id="header-left">
+    <button (click)="toggleSidebar()" title="Menú">
+      <i class="fas fa-bars"></i>
+    </button>
+    <span>
+      Taskeer
+    </span>
+  </div>
+
+  <div id="header-right">
+    <input type="search" placeholder="Buscar tareas..." [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
+
+    <!-- Botón de notificaciones -->
+    <div class="notificaciones-wrapper">
+      <button class="btn-notificaciones" (click)="toggleNotificaciones()" title="Notificaciones">
+        <i class="fas fa-bell"></i>
+        <span class="badge-notificaciones" *ngIf="cantidadNoLeidas > 0">{{ cantidadNoLeidas }}</span>
+      </button>
+
+      <!-- Modal de notificaciones dentro del wrapper -->
+      <app-modal-notificaciones [isOpen]="showNotificaciones" (close)="toggleNotificaciones()">
+      </app-modal-notificaciones>
+    </div>
+
+    <div class="user-profile-wrapper">
+      <div class="user-profile" (click)="toggleUserMenu()" title="Mi perfil">
+        <div class="user-avatar">{{ usuario.iniciales }}</div>
+        <span>{{ usuario.nombre }}</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+
+      <!-- Menú desplegable de usuario -->
+      <div class="user-menu" [class.show]="showUserMenu">
+        <div class="user-menu-header">
+          <div class="user-avatar-large">{{ usuario.iniciales }}</div>
+          <div class="user-info">
+            <div class="user-name">{{ usuario.nombre }}</div>
+            <div class="user-email">{{ usuario.email }}</div>
+          </div>
+        </div>
+
+        <hr class="user-menu-divider">
+
+        <div class="user-menu-items">
+          <button class="user-menu-item" (click)="verPerfil()">
+            <i class="fas fa-user"></i>
+            <span>Mi perfil</span>
+          </button>
+
+          <button class="user-menu-item" (click)="verConfiguracion()">
+            <i class="fas fa-cog"></i>
+            <span>Configuración</span>
+          </button>
+
+          <button class="user-menu-item" (click)="verIntegracion()">
+            <i class="fas fa-robot"></i>
+            <span>Integración </span>
+          </button>
+        </div>
+        <hr class="user-menu-divider">
+
+        <div class="user-menu-footer">
+          <button class="user-menu-item logout" (click)="cerrarSesion()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Cerrar sesión</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showModalIntegracion" (click)="cerrarModalIntegracion()">
+  <div class="modal-integracion" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-icon">
+        <i class="fas fa-robot"></i>
+      </div>
+      <h3>Integración Asistente Digital</h3>
+      <button class="btn-close" (click)="cerrarModalIntegracion()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="coming-soon-content">
+        <i class="fas fa-clock"></i>
+        <p>Próximamente integración con tu asistente digital...</p>
+        <span class="sub-text">Podrás gestionar tus tareas mediante comandos de voz y conversaciones naturales.</span>
+      </div>
+    </div>
+  </div>
+</div>
+<app-configuracion 
+  *ngIf="mostrarConfiguracion"
+  (cerrarModal)="cerrarConfiguracion()"
+></app-configuracion>

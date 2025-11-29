@@ -1,0 +1,110 @@
+<div id="adminSections">
+  <button (click)="cerrar()" class="btn-cerrar-admin">✕ Cerrar</button>
+
+  <div id="seccionCategorias">
+    <h2>Categorías</h2>
+    <form (ngSubmit)="onSubmitCategoria()">
+      <label for="nombreCategoria">Nombre de Categoría: </label>
+      <input
+        type="text"
+        id="nombreCategoria"
+        [(ngModel)]="nombreCategoria"
+        name="nombreCategoria"
+        required>
+      <button type="submit" class="btn-guardar">{{ btnTextoCategoria }}</button>
+      <button
+        *ngIf="categoriaEditando"
+        type="button"
+        (click)="limpiarFormularioCategoria()"
+        class="btn-cancelar">
+        Cancelar
+      </button>
+    </form>
+
+    <div id="listaCategorias">
+      <div *ngIf="categorias.length === 0" class="sin-datos">
+        No hay categorías
+      </div>
+      <div *ngFor="let categoria of categorias" class="item-admin">
+        <strong>{{ categoria.nombre }}</strong>
+        <div class="acciones">
+          <button (click)="editarCategoria(categoria)">Editar</button>
+          <button (click)="eliminarCategoria(categoria.idCategoria!)">Eliminar</button>
+          <button (click)="verCategoria(categoria.idCategoria!)">Ver Listas</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div id="seccionListas">
+    <h2>Listas</h2>
+    <form (ngSubmit)="onSubmitLista()">
+      <label for="nombreLista">Nombre de Lista: </label>
+      <input
+        type="text"
+        id="nombreLista"
+        [(ngModel)]="nombreLista"
+        name="nombreLista"
+        required>
+      <br><br>
+
+      <label for="colorLista">Color: </label>
+      <input
+        type="color"
+        id="colorLista"
+        [(ngModel)]="colorLista"
+        name="colorLista">
+      <br><br>
+
+      <label for="iconoLista">Icono: </label>
+      <input
+        type="text"
+        id="iconoLista"
+        [(ngModel)]="iconoLista"
+        name="iconoLista"
+        placeholder="📁">
+      <br><br>
+
+      <label for="categoriaLista">Categoría: </label>
+      <select id="categoriaLista" [(ngModel)]="categoriaLista" name="categoriaLista">
+        <option [value]="null">Sin categoría</option>
+        <option *ngFor="let categoria of categorias" [value]="categoria.idCategoria">
+          {{ categoria.nombre }}
+        </option>
+      </select>
+      <br><br>
+
+      <button type="submit" class="btn-guardar">{{ btnTextoLista }}</button>
+      <button
+        *ngIf="listaEditando"
+        type="button"
+        (click)="limpiarFormularioLista()"
+        class="btn-cancelar">
+        Cancelar
+      </button>
+    </form>
+
+    <div id="contenedorListas">
+      <div *ngIf="listas.length === 0" class="sin-datos">
+        No hay listas
+      </div>
+      <div
+        *ngFor="let lista of listas"
+        class="item-admin"
+        [style.background-color]="lista.color ? lista.color + '22' : 'transparent'">
+        <div class="info-lista">
+          <span *ngIf="lista.icono">{{ lista.icono }}</span>
+          <strong>{{ lista.nombre }}</strong>
+          <span class="categoria-tag">{{ getNombreCategoria(lista.idCategoria) }}</span>
+        </div>
+        <div class="acciones">
+          <button (click)="editarLista(lista)">Editar</button>
+          <button (click)="eliminarLista(lista.idLista!)">Eliminar</button>
+          <button (click)="verListaConTareas(lista.idLista!)">Ver Tareas</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

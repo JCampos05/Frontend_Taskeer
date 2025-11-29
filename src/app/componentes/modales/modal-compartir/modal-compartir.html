@@ -1,0 +1,113 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="cerrar()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <!-- Si NO hay clave generada todavía -->
+        <div *ngIf="!claveGenerada">
+            <div class="modal-header">
+                <i class="fas fa-share-nodes icon-header"></i>
+                <h3>Compartir {{ tipo }}</h3>
+                <button class="close-btn" (click)="cerrar()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <p>¿Estás seguro que deseas hacer compartible "{{ itemNombre }}"?</p>
+                
+                <!-- ✅ NUEVO: Información adicional para categorías -->
+                <div class="info-box" *ngIf="tipo === 'categoria'">
+                    <i class="fas fa-info-circle"></i>
+                    <p>
+                        <strong>Se generará una clave de 8 caracteres</strong> que otros usuarios podrán usar
+                        para acceder a esta categoría.
+                        <br><br>
+                        <strong>Nota importante:</strong> Al compartir la categoría, también se compartirán 
+                        automáticamente todas las listas que contiene.
+                    </p>
+                </div>
+                
+                <div class="info-box" *ngIf="tipo === 'lista'">
+                    <i class="fas fa-info-circle"></i>
+                    <p>
+                        <strong>Se generará una clave de 8 caracteres</strong> que otros usuarios podrán usar
+                        para acceder a esta {{ tipo }}.
+                    </p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" (click)="cerrar()" [disabled]="loading">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button class="btn-confirm" (click)="confirmarCompartir()" [disabled]="loading">
+                    <i class="fas fa-key" *ngIf="!loading"></i>
+                    <i class="fas fa-spinner fa-spin" *ngIf="loading"></i>
+                    <span *ngIf="!loading">Generar clave</span>
+                    <span *ngIf="loading">Generando...</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Si YA hay clave generada -->
+        <div *ngIf="claveGenerada">
+            <div class="modal-header success">
+                <i class="fas fa-check-circle icon-success"></i>
+                <h3>{{ tipo | titlecase }} compartida</h3>
+                <button class="close-btn" (click)="cerrar()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <p class="success-msg">
+                    <i class="fas fa-check-circle"></i>
+                    ¡La clave se generó exitosamente!
+                </p>
+
+                <!-- ✅ NUEVO: Mostrar información de listas compartidas -->
+                <div class="listas-compartidas-info" *ngIf="tipo === 'categoria' && listasCompartidas > 0">
+                    <i class="fas fa-list"></i>
+                    <span>
+                        Se compartieron automáticamente <strong>{{ listasCompartidas }}</strong> 
+                        {{ listasCompartidas === 1 ? 'lista' : 'listas' }} de esta categoría
+                    </span>
+                </div>
+
+                <div class="clave-container">
+                    <label><i class="fas fa-key"></i> Clave de acceso:</label>
+                    <div class="clave-box">
+                        <code class="clave">{{ claveGenerada }}</code>
+                        <button class="btn-copy" (click)="copiarClave()" [class.copiado]="copiado">
+                            <i class="fas" [ngClass]="copiado ? 'fa-check' : 'fa-copy'"></i>
+                            {{ copiado ? 'Copiado' : 'Copiar' }}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="url-container" *ngIf="urlCompartir">
+                    <label><i class="fas fa-link"></i> URL directa:</label>
+                    <div class="url-box">
+                        <input type="text" [value]="urlCompartir" readonly />
+                        <button class="btn-copy-small" (click)="copiarUrl()"
+                            [title]="copiado ? 'Copiado' : 'Copiar URL'">
+                            <i class="fas" [ngClass]="copiado ? 'fa-check' : 'fa-copy'"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p>
+                        Comparte esta clave con otras personas para que puedan acceder a tu {{ tipo }}.
+                        <span *ngIf="tipo === 'categoria'">
+                            Al usar esta clave, también obtendrán acceso a todas las listas de la categoría.
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-primary" (click)="cerrar()">
+                    <i class="fas fa-check"></i>
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

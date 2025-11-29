@@ -1,0 +1,123 @@
+<div class="verification-container">
+    <div class="verification-panel">
+        <!-- Header -->
+        <div class="header-section">
+            <a href="/landing" class="brand-container" style="text-decoration: none; color: inherit">
+                <div class="brand-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="48" height="48">
+                        <rect width="200" height="200" rx="32" ry="32" fill="#274690" />
+                        <circle cx="42" cy="38" r="8" fill="#FFFFFF" opacity="0.4" />
+                        <circle cx="100" cy="38" r="8" fill="#FFFFFF" opacity="0.4" />
+                        <circle cx="158" cy="38" r="8" fill="#FFFFFF" opacity="0.4" />
+                        <rect x="25" y="65" width="42" height="115" rx="8" ry="8" fill="#FFFFFF" />
+                        <circle cx="46" cy="122" r="10" fill="#274690" />
+                        <rect x="79" y="65" width="42" height="115" rx="8" ry="8" fill="#FFFFFF" />
+                        <rect x="87" y="118" width="26" height="8" rx="4" ry="4" fill="#274690" />
+                        <rect x="133" y="65" width="42" height="115" rx="8" ry="8" fill="#FFFFFF" />
+                        <path d="M 143 120 L 151 130 L 165 110" stroke="#274690" stroke-width="6" stroke-linecap="round"
+                            stroke-linejoin="round" fill="none" />
+                    </svg>
+                </div>
+                <div class="brand-name">Taskeer</div>
+            </a>
+        </div>
+
+        <!-- Contenido Principal -->
+        <div class="content-section">
+            <div class="verification-wrapper">
+                <div class="email-icon">
+                    <i class="fas fa-shield-keyhole"></i>
+                </div>
+
+                <div class="verification-header">
+                    <h2>Verifica tu código</h2>
+                    <p>
+                        Hemos enviado un código de recuperación a<br>
+                        <strong>{{ emailOfuscado }}</strong>
+                    </p>
+                </div>
+
+                <div class="message success-message" *ngIf="successMessage">
+                    <i class="fas fa-circle-check"></i>
+                    {{ successMessage }}
+                </div>
+
+                <div class="message error-message" *ngIf="errorMessage">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ errorMessage }}
+                </div>
+
+                <div class="code-inputs">
+                    <input *ngFor="let digit of codigo; let i = index" type="text" maxlength="1" class="code-input"
+                        [id]="'digit-' + i" [value]="digit" (input)="onDigitInput($event, i)"
+                        (keydown)="onDigitKeyDown($event, i)" (paste)="i === 0 ? onPaste($event) : null"
+                        [disabled]="isLoading" autocomplete="off">
+                </div>
+
+                <div class="attempts-info" *ngIf="errorMessage && intentosRestantes > 0">
+                    <i class="fas fa-info-circle"></i>
+                    Te quedan {{ intentosRestantes }} intento(s)
+                </div>
+
+                <button type="button" class="verify-btn" (click)="verificarCodigo()" [disabled]="isLoading">
+                    <i [class]="isLoading ? 'fas fa-spinner fa-spin' : 'fas fa-check-circle'"></i>
+                    {{ isLoading ? 'Verificando...' : 'Verificar Código' }}
+                </button>
+
+                <div class="resend-section">
+                    <p class="resend-text">¿No recibiste el código?</p>
+
+                    <button type="button" class="resend-btn" (click)="reenviarCodigo()"
+                        [disabled]="isResending || cooldownSeconds > 0">
+                        <i [class]="isResending ? 'fas fa-spinner fa-spin' : 'fas fa-rotate-right'"></i>
+                        <span *ngIf="cooldownSeconds > 0">
+                            Espera {{ cooldownSeconds }}s
+                        </span>
+                        <span *ngIf="cooldownSeconds === 0 && !isResending">
+                            Reenviar código
+                        </span>
+                        <span *ngIf="isResending">
+                            Enviando...
+                        </span>
+                    </button>
+                </div>
+
+                <div class="back-section">
+                    <button type="button" class="back-btn" (click)="volverAlRecuperar()">
+                        <i class="fas fa-arrow-left"></i>
+                        Volver
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel Decorativo -->
+    <div class="decorative-panel">
+        <div class="decorative-content">
+            <div class="decorative-icon">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <h3>Verificación Segura</h3>
+            <p>
+                Verificamos tu identidad mediante un código temporal para garantizar que solo tú puedas cambiar tu
+                contraseña.
+            </p>
+
+            <div class="security-features">
+                <div class="security-item">
+                    <i class="fas fa-lock"></i>
+                    <span>Código encriptado</span>
+                </div>
+                <div class="security-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Expira en 15 minutos</span>
+                </div>
+                <div class="security-item">
+                    <i class="fas fa-shield-halved"></i>
+                    <span>Protección total</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

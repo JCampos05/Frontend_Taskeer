@@ -1,0 +1,361 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-header.success {
+  background-color: #f0f9f4;
+  border-bottom-color: #4caf50;
+}
+
+.modal-header h3 {
+  flex: 1;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.icon-header {
+  font-size: 20px;
+  color: #2196f3;
+}
+
+.icon-success {
+  font-size: 20px;
+  color: #4caf50;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-body p {
+  margin: 0 0 16px 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+.info-box {
+  background-color: #e3f2fd;
+  border-left: 4px solid #2196f3;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.info-box i {
+  color: #2196f3;
+  font-size: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.info-box p {
+  margin: 0;
+  font-size: 14px;
+  color: #1565c0;
+  flex: 1;
+}
+
+.success-msg {
+  color: #4caf50 !important;
+  font-weight: 500;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.success-msg i {
+  font-size: 18px;
+}
+
+.clave-container, .url-container {
+  margin: 20px 0;
+}
+
+.clave-container label, .url-container label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+.clave-container label i, .url-container label i {
+  color: #2196f3;
+  font-size: 14px;
+}
+
+.clave-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 6px;
+  border: 2px solid #e0e0e0;
+}
+
+.clave {
+  flex: 1;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #2196f3;
+  font-family: 'Courier New', monospace;
+}
+
+.btn-copy {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.btn-copy i {
+  font-size: 13px;
+}
+
+.btn-copy:hover {
+  background-color: #1976d2;
+}
+
+.btn-copy.copiado {
+  background-color: #4caf50;
+}
+
+.url-box {
+  display: flex;
+  gap: 8px;
+}
+
+.url-box input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #666;
+}
+
+.btn-copy-small {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-copy-small:hover {
+  background-color: #1976d2;
+}
+
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-cancel, .btn-confirm, .btn-primary {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.btn-cancel i, .btn-confirm i, .btn-primary i {
+  font-size: 14px;
+}
+
+.btn-cancel {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.btn-cancel:hover {
+  background-color: #e0e0e0;
+}
+
+.btn-confirm {
+  background-color: #2196f3;
+  color: white;
+}
+
+.btn-confirm:hover {
+  background-color: #1976d2;
+}
+
+.btn-primary {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+.listas-compartidas-info {
+  background-color: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #0369a1;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.listas-compartidas-info i {
+  font-size: 18px;
+  color: #0284c7;
+  flex-shrink: 0;
+}
+
+.listas-compartidas-info span {
+  flex: 1;
+}
+
+.listas-compartidas-info strong {
+  font-weight: 600;
+  color: #075985;
+}
+
+/* Mejoras para la clave */
+.clave-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  padding: 14px;
+  border-radius: 8px;
+  border: 2px solid #2196f3;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+}
+
+.clave {
+  flex: 1;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 5px;
+  color: #2196f3;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+}
+
+/* Animación de copiado */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.btn-copy.copiado {
+  background-color: #4caf50;
+  animation: pulse 0.3s ease-in-out;
+}
+
+/* Mejorar el info-box para categorías */
+.info-box p {
+  margin: 0;
+  font-size: 14px;
+  color: #1565c0;
+  flex: 1;
+  line-height: 1.6;
+}
+
+.info-box strong {
+  color: #0d47a1;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .clave {
+    font-size: 20px;
+    letter-spacing: 3px;
+  }
+  
+  .listas-compartidas-info {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+}

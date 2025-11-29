@@ -1,0 +1,334 @@
+<div class="perfil-overlay" (click)="cerrar()">
+    <div class="perfil-container" (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="perfil-header">
+            <div class="header-content">
+                <div class="usuario-info">
+                    <div class="usuario-avatar">
+                        {{ obtenerIniciales(usuario?.nombre || '') }}
+                    </div>
+                    <div class="usuario-detalles">
+                        <h1>{{ usuario?.nombre }}</h1>
+                        <p>{{ usuario?.email }}</p>
+                        <span class="usuario-fecha" *ngIf="usuario?.fechaRegistro">
+                            <i class="fas fa-calendar"></i>
+                            Miembro desde {{ formatearMiembroDesde(usuario!.fechaRegistro) }}
+                        </span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-configuracion" (click)="abrirConfiguracion(); $event.stopPropagation()"
+                        title="Configuración">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button class="btn-cerrar" (click)="cerrar()" title="Cerrar">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div *ngIf="cargando" class="loading-container">
+            <div class="spinner"></div>
+            <p>Cargando estadísticas...</p>
+        </div>
+
+        <!-- Contenido -->
+        <div *ngIf="!cargando" class="perfil-content">
+            <!-- Información Personal -->
+            <div class="seccion-card info-personal-card" *ngIf="usuario">
+                <div class="seccion-header">
+                    <h2>
+                        <i class="fas fa-user"></i>
+                        Información Personal
+                    </h2>
+                </div>
+                <div class="info-personal-grid">
+                    <div class="info-item" *ngIf="usuario.cargo">
+                        <div class="info-icon" style="background: rgba(39, 70, 144, 0.1)">
+                            <i class="fas fa-briefcase" style="color: #274690"></i>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Cargo</span>
+                            <span class="info-valor">{{ usuario.cargo }}</span>
+                        </div>
+                    </div>
+
+                    <div class="info-item" *ngIf="usuario.ubicacion">
+                        <div class="info-icon" style="background: rgba(87, 108, 168, 0.1)">
+                            <i class="fas fa-map-marker-alt" style="color: #576ca8"></i>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Ubicación</span>
+                            <span class="info-valor">{{ usuario.ubicacion }}</span>
+                        </div>
+                    </div>
+
+                    <div class="info-item" *ngIf="usuario.telefono">
+                        <div class="info-icon" style="background: rgba(0, 135, 90, 0.1)">
+                            <i class="fas fa-phone" style="color: #00875a"></i>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Teléfono</span>
+                            <span class="info-valor">{{ usuario.telefono }}</span>
+                        </div>
+                    </div>
+
+                    <div class="info-item info-item-full" *ngIf="usuario.bio">
+                        <div class="info-icon" style="background: rgba(101, 84, 192, 0.1)">
+                            <i class="fas fa-quote-left" style="color: #6554c0"></i>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Biografía</span>
+                            <span class="info-valor">{{ usuario.bio }}</span>
+                        </div>
+                    </div>
+
+                    <div class="redes-sociales" *ngIf="usuario.redes_sociales && tieneRedesSociales()">
+                        <span class="info-label">Redes Sociales</span>
+                        <div class="redes-iconos">
+                            <a *ngIf="usuario.redes_sociales.linkedin" [href]="usuario.redes_sociales.linkedin"
+                                target="_blank" class="red-social linkedin" title="LinkedIn">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a *ngIf="usuario.redes_sociales.github" [href]="usuario.redes_sociales.github"
+                                target="_blank" class="red-social github" title="GitHub">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a *ngIf="usuario.redes_sociales.twitter" [href]="usuario.redes_sociales.twitter"
+                                target="_blank" class="red-social twitter" title="Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sin-info" *ngIf="!tieneInformacionPersonal()">
+                    <i class="fas fa-user-circle"></i>
+                    <p>No has completado tu información personal</p>
+                    <button class="btn-completar" (click)="abrirConfiguracion()">
+                        <i class="fas fa-edit"></i>
+                        Completar perfil
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tarjetas de métricas rápidas -->
+            <div class="metricas-grid">
+                <div class="metrica-card">
+                    <div class="metrica-icon" style="background: rgba(0, 135, 90, 0.1)">
+                        <i class="fas fa-check-circle" style="color: #00875a"></i>
+                    </div>
+                    <div class="metrica-info">
+                        <h3>{{ estadisticas?.tareasCompletadas || 0 }}</h3>
+                        <p>Completadas</p>
+                    </div>
+                </div>
+
+                <div class="metrica-card">
+                    <div class="metrica-icon" style="background: rgba(0, 82, 204, 0.1)">
+                        <i class="fas fa-tasks" style="color: #0052cc"></i>
+                    </div>
+                    <div class="metrica-info">
+                        <h3>{{ estadisticas?.tareasEnProceso || 0 }}</h3>
+                        <p>En Proceso</p>
+                    </div>
+                </div>
+
+                <div class="metrica-card">
+                    <div class="metrica-icon" style="background: rgba(101, 84, 192, 0.1)">
+                        <i class="fas fa-clock" style="color: #6554c0"></i>
+                    </div>
+                    <div class="metrica-info">
+                        <h3>{{ estadisticas?.tareasPendientes || 0 }}</h3>
+                        <p>Pendientes</p>
+                    </div>
+                </div>
+
+                <!--div class="metrica-card">
+                    <div class="metrica-icon" style="background: rgba(255, 153, 31, 0.1)">
+                        <i class="fas fa-fire" style="color: #ff991f"></i>
+                    </div>
+                    <div class="metrica-info">
+                        <h3>{{ estadisticas?.rachaActual || 0 }}</h3>
+                        <p>Días de racha</p>
+                    </div>
+                </!--div-->
+            </div>
+
+            <!-- Gráfico de Rendimiento -->
+            <div class="seccion-card">
+                <div class="seccion-header">
+                    <h2>
+                        <i class="fas fa-chart-line"></i>
+                        Rendimiento
+                    </h2>
+                    <div class="periodo-selector">
+                        <button [class.activo]="periodoSeleccionado === 'diaria'" (click)="cambiarPeriodo('diaria')">
+                            Diaria
+                        </button>
+                        <button [class.activo]="periodoSeleccionado === 'semanal'" (click)="cambiarPeriodo('semanal')">
+                            Semanal
+                        </button>
+                        <button [class.activo]="periodoSeleccionado === 'mensual'" (click)="cambiarPeriodo('mensual')">
+                            Mensual
+                        </button>
+                    </div>
+                </div>
+                <div class="grafico-container">
+                    <canvas id="chartRendimiento"></canvas>
+                </div>
+            </div>
+
+            <!-- Grid de 2 columnas -->
+            <div class="grid-dos-columnas">
+                <!-- Calendario de Contribuciones -->
+                <div class="seccion-card">
+                    <div class="seccion-header">
+                        <h2>
+                            <i class="fas fa-calendar-check"></i>
+                            Actividad
+                        </h2>
+                    </div>
+                    <div class="calendario-contribuciones">
+                        <div class="contribuciones-grid">
+                            <div *ngFor="let dia of contribuciones" class="contribucion-dia" [style.background-color]="
+                  obtenerColorContribucion(obtenerNivelContribucion(dia.cantidad))
+                " [title]="dia.cantidad + ' tareas completadas el ' + formatearFechaCorta(dia.fecha)"></div>
+                        </div>
+                        <div class="leyenda-contribuciones">
+                            <span>Menos</span>
+                            <div class="leyenda-colores">
+                                <div class="leyenda-color" style="background: #f5f5f5"></div>
+                                <div class="leyenda-color" style="background: #c6e5d9"></div>
+                                <div class="leyenda-color" style="background: #7fc8a9"></div>
+                                <div class="leyenda-color" style="background: #00875a"></div>
+                                <div class="leyenda-color" style="background: #006644"></div>
+                            </div>
+                            <span>Más</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categorías más frecuentes -->
+                <div class="seccion-card">
+                    <div class="seccion-header">
+                        <h2>
+                            <i class="fas fa-chart-pie"></i>
+                            Categorías Frecuentes
+                        </h2>
+                    </div>
+                    <div class="grafico-container grafico-pequeno">
+                        <canvas id="chartCategorias"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historial Reciente -->
+            <div class="seccion-card">
+                <div class="seccion-header">
+                    <h2>
+                        <i class="fas fa-history"></i>
+                        Actividad Reciente
+                    </h2>
+                </div>
+                <div class="historial-lista">
+                    <div *ngFor="let item of historialReciente" class="historial-item">
+                        <div class="historial-icon" [style.color]="obtenerColorAccion(item.accion)">
+                            <i class="fas" [ngClass]="obtenerIconoAccion(item.accion)"></i>
+                        </div>
+                        <div class="historial-info">
+                            <p class="historial-nombre">{{ item.nombre }}</p>
+                            <div class="historial-meta">
+                                <span class="historial-accion" [style.color]="obtenerColorAccion(item.accion)">
+                                    {{
+                                    item.accion === 'completada'
+                                    ? 'Completada'
+                                    : item.accion === 'creada'
+                                    ? 'Creada'
+                                    : 'Modificada'
+                                    }}
+                                </span>
+                                <span class="historial-lista" *ngIf="item.nombreLista">
+                                    <i class="fas fa-list"></i>
+                                    {{ item.nombreLista }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="historial-fecha">
+                            {{ formatearFechaCorta(item.fecha) }}
+                        </div>
+                    </div>
+
+                    <div *ngIf="historialReciente.length === 0" class="sin-historial">
+                        <i class="fas fa-inbox"></i>
+                        <p>No hay actividad reciente</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estadísticas adicionales -->
+            <div class="grid-dos-columnas">
+                <div class="seccion-card">
+                    <div class="seccion-header">
+                        <h2>
+                            <i class="fas fa-award"></i>
+                            Logros
+                        </h2>
+                    </div>
+                    <div class="estadisticas-lista">
+                        <div class="estadistica-item">
+                            <span class="estadistica-label">Porcentaje de completación</span>
+                            <span class="estadistica-valor">{{ estadisticas?.porcentajeCompletadas || 0 }}%</span>
+                        </div>
+                        <!--div class="estadistica-item">
+                            <span class="estadistica-label">Racha máxima</span>
+                            <span class="estadistica-valor">{{ estadisticas?.rachaMaxima || 0 }} días</span>
+                        </!--div-->
+                        <div class="estadistica-item">
+                            <span class="estadistica-label">Total de tareas</span>
+                            <span class="estadistica-valor">{{ estadisticas?.totalTareas || 0 }}</span>
+                        </div>
+                        <div class="estadistica-item">
+                            <span class="estadistica-label">Tiempo promedio</span>
+                            <span class="estadistica-valor">{{ estadisticas?.tiempoPromedioCompletacion || 0 }}
+                                días</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="seccion-card">
+                    <div class="seccion-header">
+                        <h2>
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Alertas
+                        </h2>
+                    </div>
+                    <div class="alertas-lista">
+                        <div class="alerta-item alerta-warning" *ngIf="(estadisticas?.tareasVencidas || 0) > 0">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Tienes {{ estadisticas?.tareasVencidas }} tareas vencidas</span>
+                        </div>
+                        <div class="alerta-item alerta-info" *ngIf="(estadisticas?.tareasPendientes || 0) > 10">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Tienes muchas tareas pendientes ({{ estadisticas?.tareasPendientes }})</span>
+                        </div>
+                        <div class="alerta-item alerta-success" *ngIf="(estadisticas?.rachaActual || 0) >= 7">
+                            <i class="fas fa-fire"></i>
+                            <span>¡Excelente racha de {{ estadisticas?.rachaActual }} días!</span>
+                        </div>
+                        <div *ngIf="
+                (estadisticas?.tareasVencidas || 0) === 0 &&
+                (estadisticas?.tareasPendientes || 0) <= 10 &&
+                (estadisticas?.rachaActual || 0) < 7
+              " class="sin-alertas">
+                            <i class="fas fa-check-circle"></i>
+                            <p>Todo está en orden</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

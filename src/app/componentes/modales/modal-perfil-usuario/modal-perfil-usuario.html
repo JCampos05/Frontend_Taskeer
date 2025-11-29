@@ -1,0 +1,115 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="cerrarModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <!-- Botón cerrar -->
+        <button class="btn-cerrar-modal" (click)="cerrarModal()" title="Cerrar">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <!-- Header del perfil con avatar grande -->
+        <div class="perfil-header">
+            <div class="avatar-grande" [style.background]="obtenerColorAvatar(usuario?.nombre || '')">
+                {{ obtenerIniciales(usuario?.nombre || '') }}
+            </div>
+
+            <h2 class="perfil-nombre">{{ usuario?.nombre || 'Usuario' }}</h2>
+
+            <div class="perfil-rol" *ngIf="usuario?.rol || usuario?.esCreador">
+                <i class="fas" [ngClass]="usuario?.esCreador ? 'fa-crown' : obtenerIconoRol(usuario?.rol)"></i>
+                <span>{{ usuario?.esCreador ? 'Propietario' : obtenerRolTraducido(usuario?.rol) }}</span>
+            </div>
+        </div>
+
+        <!-- Información de contacto -->
+        <div class="perfil-section">
+            <h3 class="section-title">
+                <i class="fas fa-address-card"></i>
+                Información de Contacto
+            </h3>
+
+            <div class="info-item" *ngIf="usuario?.correo">
+                <div class="info-label">
+                    <i class="fas fa-envelope"></i>
+                    Correo electrónico
+                </div>
+                <div class="info-value">
+                    <span>{{ usuario?.correo }}</span>
+                    <button class="btn-copiar" (click)="copiarCorreo()" title="Copiar correo">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="info-item" *ngIf="usuario?.telefono">
+                <div class="info-label">
+                    <i class="fas fa-phone"></i>
+                    Teléfono
+                </div>
+                <div class="info-value">
+                    <span>{{ usuario?.telefono }}</span>
+                    <button class="btn-copiar" (click)="copiarTelefono()" title="Copiar teléfono">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="info-item" *ngIf="usuario?.cargo">
+                <div class="info-label">
+                    <i class="fas fa-briefcase"></i>
+                    Cargo
+                </div>
+                <div class="info-value">
+                    <span>{{ usuario?.cargo }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biografía -->
+        <div class="perfil-section" *ngIf="usuario?.bio">
+            <h3 class="section-title">
+                <i class="fas fa-user-circle"></i>
+                Acerca de
+            </h3>
+            <p class="perfil-bio">{{ usuario?.bio }}</p>
+        </div>
+
+        <!-- Redes sociales -->
+        <div class="perfil-section" *ngIf="tieneRedesSociales()">
+            <h3 class="section-title">
+                <i class="fas fa-share-nodes"></i>
+                Redes Sociales
+            </h3>
+
+            <div class="redes-sociales">
+                <button class="btn-red-social linkedin" *ngIf="usuario?.redesSociales?.linkedin"
+                    (click)="abrirRedSocial(usuario?.redesSociales?.linkedin)" title="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                    <span>LinkedIn</span>
+                </button>
+
+                <button class="btn-red-social twitter" *ngIf="usuario?.redesSociales?.twitter"
+                    (click)="abrirRedSocial(usuario?.redesSociales?.twitter)" title="Twitter / X">
+                    <i class="fab fa-twitter"></i>
+                    <span>Twitter</span>
+                </button>
+
+                <button class="btn-red-social github" *ngIf="usuario?.redesSociales?.github"
+                    (click)="abrirRedSocial(usuario?.redesSociales?.github)" title="GitHub">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                </button>
+
+                <button class="btn-red-social instagram" *ngIf="usuario?.redesSociales?.instagram"
+                    (click)="abrirRedSocial(usuario?.redesSociales?.instagram)" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                    <span>Instagram</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Estado vacío si no hay información adicional -->
+        <div class="empty-info" *ngIf="!usuario?.telefono && !usuario?.cargo && !usuario?.bio && !tieneRedesSociales()">
+            <i class="fas fa-user-slash"></i>
+            <p>Este usuario no ha compartido información adicional</p>
+        </div>
+    </div>
+</div>

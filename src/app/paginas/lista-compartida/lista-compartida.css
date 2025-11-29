@@ -1,0 +1,483 @@
+/* Contenedor principal */
+.vista-container {
+    padding: 0;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* ========== HEADER UNIFICADO - ESTILO MI-SEMANA ========== */
+.vista-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 32px;
+    background: white;
+    border-bottom: 2px solid #dfe1e6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    z-index: 10;
+    gap: 20px;
+    flex-shrink: 0;
+}
+
+.header-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.vista-header h2 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    color: #172b4d;
+    gap: 12px;
+    letter-spacing: -0.3px;
+}
+
+.vista-header h2 i {
+    font-size: 24px;
+    color: #00875A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vista-header p {
+    display: none;
+}
+
+/* Botón de acción principal */
+.btn-nuevo {
+    padding: 12px 24px;
+    border-radius: 6px;
+    border: none;
+    background: #0052cc;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 82, 204, 0.2);
+    white-space: nowrap;
+    height: fit-content;
+}
+
+.btn-nuevo:hover {
+    background: #0065ff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.3);
+}
+
+.btn-nuevo:active {
+    transform: translateY(0);
+}
+
+.btn-nuevo i {
+    font-size: 16px;
+}
+
+/* Contenedor de contenido */
+.listas-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 32px;
+    background: #f7f8f9;
+}
+
+/* Grid de listas */
+.listas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+/* Card de lista */
+.lista-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(9, 30, 66, 0.12);
+    transition: all 0.2s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.lista-card:hover {
+    box-shadow: 0 4px 12px rgba(9, 30, 66, 0.15);
+    transform: translateY(-2px);
+}
+
+.lista-content {
+    padding: 16px;
+    cursor: pointer;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.lista-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    color: white;
+}
+
+.lista-info {
+    flex: 1;
+}
+
+.lista-info h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #172b4d;
+    word-break: break-word;
+}
+
+.lista-categoria,
+.lista-sin-categoria {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #5e6c84;
+    padding: 4px 8px;
+    background: #f4f5f7;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.lista-badge {
+    align-self: flex-start;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.lista-badge.compartiendo {
+    background-color: #fff4e6;
+    color: #ff991f;
+}
+
+.lista-badge.compartida {
+    background-color: #E3FCEF;
+    color: #00875A;
+}
+
+/* Acciones de la lista */
+.lista-acciones {
+    display: flex;
+    gap: 8px;
+    padding: 8px 16px 12px;
+    border-top: 1px solid #f4f5f7;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.lista-card:hover .lista-acciones {
+    opacity: 1;
+}
+
+.btn-accion {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #dfe1e6;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+    color: #42526e;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+}
+
+.btn-accion:hover {
+    background: #f4f5f7;
+    transform: translateY(-1px);
+}
+
+.btn-descompartir {
+    border-color: #de350b;
+    color: #de350b;
+}
+
+.btn-descompartir:hover {
+    background: #ffebe6;
+    border-color: #bf2600;
+}
+
+.btn-salir {
+    border-color: #ff991f;
+    color: #ff991f;
+}
+
+.btn-salir:hover {
+    background: #fff4e6;
+    border-color: #ff8b00;
+}
+
+/* Estados de carga y error */
+.loading-state,
+.error-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: #5e6c84;
+}
+
+.loading-state i,
+.error-state i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: #0052cc;
+}
+
+.error-state i {
+    color: #de350b;
+}
+
+.btn-retry {
+    margin-top: 16px;
+    padding: 10px 20px;
+    background: #0052cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-retry:hover {
+    background: #0065ff;
+}
+
+/* Sin listas */
+.sin-listas {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 64px 24px;
+    color: #5e6c84;
+}
+
+.sin-listas i {
+    font-size: 64px;
+    color: #dfe1e6;
+    margin-bottom: 16px;
+}
+
+.sin-listas p {
+    font-size: 18px;
+    margin: 8px 0;
+}
+
+.sin-listas small {
+    font-size: 14px;
+    color: #8993a4;
+}
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(9, 30, 66, 0.54);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 480px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 24px rgba(9, 30, 66, 0.25);
+    animation: slideUp 0.3s;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #f4f5f7;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #172b4d;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+}
+
+.modal-body p {
+    margin: 0 0 12px 0;
+    color: #172b4d;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.advertencia {
+    color: #de350b;
+    font-size: 13px;
+    background: #ffebe6;
+    padding: 12px;
+    border-radius: 4px;
+    border-left: 3px solid #de350b;
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #f4f5f7;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.btn-cancelar {
+    padding: 8px 16px;
+    background: white;
+    border: 1px solid #dfe1e6;
+    border-radius: 4px;
+    color: #42526e;
+    cursor: pointer;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.btn-cancelar:hover {
+    background: #f4f5f7;
+}
+
+.btn-confirmar-eliminar {
+    padding: 8px 16px;
+    background: #de350b;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.btn-confirmar-eliminar:hover {
+    background: #bf2600;
+}
+
+.btn-confirmar {
+    padding: 8px 16px;
+    background: #0052cc;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.btn-confirmar:hover {
+    background: #0065ff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .vista-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+    }
+
+    .listas-content {
+        padding: 16px;
+    }
+
+    .vista-header h2 {
+        font-size: 20px;
+    }
+
+    .vista-header h2 i {
+        font-size: 20px;
+    }
+
+    .btn-nuevo {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .listas-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 16px;
+    }
+}

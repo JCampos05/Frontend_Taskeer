@@ -1,0 +1,150 @@
+<!-- src/app/componentes/chat/vista-chat.html -->
+<div class="chat-container">
+  <!-- Header del Chat -->
+  <div class="chat-header">
+    <div class="chat-header-left">
+      <h3>
+        <i class="fas fa-comments"></i>
+        Chat de Lista
+      </h3>
+      <span class="status-indicator" [class.connected]="isConnected"></span>
+    </div>
+    
+    <div class="chat-header-right">
+      <!-- Usuarios Online -->
+      <div class="users-online" *ngIf="usuariosOnline.length > 0">
+        <span class="online-badge">
+          <i class="fas fa-users"></i>
+          {{ usuariosOnline.length }} online
+        </span>
+        
+        <div class="users-tooltip">
+          <div class="user-item" *ngFor="let usuario of usuariosOnline">
+            <span class="user-status-dot"></span>
+            {{ usuario.nombre || usuario.email }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Marcar todos como leídos -->
+      <button 
+        class="btn-mark-read" 
+        (click)="marcarTodosLeidos()"
+        title="Marcar todos como leídos">
+        <i class="fas fa-check-double"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenedor de Mensajes -->
+  <div 
+    class="messages-container" 
+    #messagesContainer
+    (scroll)="onScroll($event)">
+    
+    <!-- Spinner de carga de mensajes antiguos -->
+    <div class="loading-more" *ngIf="isLoading && offset > 0">
+      <div class="spinner"></div>
+      <span>Cargando mensajes...</span>
+    </div>
+
+    <!-- No hay más mensajes -->
+    <div class="no-more-messages" *ngIf="!hasMoreMessages && mensajes.length > 0">
+      <i class="fas fa-history"></i>
+      <span>Inicio del chat</span>
+    </div>
+
+    <!-- Mensajes vacíos -->
+    <div class="empty-state" *ngIf="mensajes.length === 0 && !isLoading">
+      <div class="empty-icon">
+        <i class="fas fa-comments"></i>
+      </div>
+      <h4>No hay mensajes aún</h4>
+      <p>Sé el primero en enviar un mensaje</p>
+    </div>
+
+    <!-- Lista de Mensajes -->
+    <div class="messages-list" *ngIf="mensajes.length > 0">
+      <div 
+        class="message-wrapper"
+        *ngFor="let mensaje of mensajes; trackBy: trackByMensajeId"
+        [class.my-message]="esMiMensaje(mensaje)"
+        [class.other-message]="!esMiMensaje(mensaje)">
+        
+        <div class="message-bubble">
+          <!-- Info del remitente (solo para mensajes de otros) -->
+          <div class="message-sender" *ngIf="!esMiMensaje(mensaje)">
+            <strong>{{ mensaje.nombreUsuario || mensaje.usuario?.nombre || mensaje.emailUsuario || mensaje.usuario?.email }}</strong>
+          </div>
+
+          <!-- Contenido del mensaje -->
+          <div class="message-content">
+            {{ mensaje.contenido }}
+          </div>
+
+          <!-- Footer del mensaje -->
+          <div class="message-footer">
+            <span class="message-time">
+              <i class="far fa-clock"></i>
+              {{ formatearFecha(mensaje.fechaCreacion) }}
+            </span>
+            
+            <span class="message-edited" *ngIf="mensaje.editado">
+              <i class="fas fa-pencil-alt"></i>
+              (editado)
+            </span>
+
+            <!-- Indicador de lectura (solo para mensajes propios) -->
+            <span class="message-read" *ngIf="esMiMensaje(mensaje) && mensaje.totalLecturas">
+              <span class="read-icon" [title]="'Leído por ' + mensaje.totalLecturas + ' usuario(s)'">
+                <i class="fas fa-check-double"></i>
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indicador de "escribiendo..." -->
+    <div class="typing-indicator" *ngIf="usuariosEscribiendo.size > 0">
+      <div class="typing-bubble">
+        <span class="typing-text">{{ getNombresEscribiendo() }}</span>
+        <div class="typing-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input de Mensaje -->
+  <div class="chat-input-container">
+    <div class="input-wrapper">
+      <textarea
+        [(ngModel)]="nuevoMensaje"
+        (ngModelChange)="onInputChange()"
+        (keydown.enter)="handleEnter($any($event))"
+        placeholder="Escribe un mensaje..."
+        rows="1"
+        [disabled]="!isConnected || isSending"
+        class="message-input">
+      </textarea>
+
+      <button 
+        class="btn-send"
+        (click)="enviarMensaje()"
+        [disabled]="!nuevoMensaje.trim() || !isConnected || isSending"
+        title="Enviar mensaje">
+        <i *ngIf="!isSending" class="fas fa-paper-plane"></i>
+        <span *ngIf="isSending" class="spinner-small"></span>
+      </button>
+    </div>
+
+    <!-- Estado de conexión -->
+    <div class="connection-status" *ngIf="!isConnected">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span class="status-text">Desconectado del chat. Reconectando...</span>
+    </div>
+  </div>
+</div>

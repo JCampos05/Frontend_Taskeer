@@ -1,0 +1,122 @@
+<!-- Botón de alternancia de vista (arriba del grid) -->
+<div class="vista-controls">
+  <button 
+    class="btn-vista-toggle" 
+    (click)="alternarModoVista()"
+    [title]="modoVista === 'card' ? 'Cambiar a vista de lista' : 'Cambiar a vista de tarjetas'">
+    <i *ngIf="modoVista === 'card'" class="fas fa-list"></i>
+    <i *ngIf="modoVista === 'lista'" class="fas fa-th-large"></i>
+  </button>
+</div>
+
+<div id="contentArea">
+  <!-- COLUMNA TAREAS (Pendientes) -->
+  <div class="columna">
+    <div class="columna-header">
+      Tareas
+      <button (click)="abrirPanelDetalles()" class="btn-agregar" [disabled]="!puedeEditar"
+        [title]="!puedeEditar ? 'No tienes permisos para agregar tareas' : 'Agregar tarea'">
+        +
+      </button>
+    </div>
+    <div 
+      [class]="modoVista === 'card' ? 'columna-content' : 'columna-content columna-content-lista'"
+      id="tareasPendientes" 
+      cdkDropList 
+      [cdkDropListData]="tareasPendientes"
+      [cdkDropListConnectedTo]="['tareasEnProceso', 'tareasTerminadas']"
+      [cdkDropListDisabled]="!puedeEditar" 
+      (cdkDropListDropped)="onDrop($event, 'P')">
+      <p *ngIf="tareasPendientes.length === 0" class="sin-tareas">Sin tareas pendientes</p>
+      <app-tarea-card 
+        *ngFor="let tarea of tareasPendientes" 
+        [tarea]="tarea" 
+        [puedeEditar]="puedeEditar"
+        [puedeEliminar]="puedeEliminar" 
+        [puedeAsignar]="puedeAsignar"
+        [modoVista]="modoVista"
+        [cdkDragDisabled]="!puedeEditar" 
+        cdkDrag
+        (tareaClick)="abrirPanelDetalles(tarea.idTarea!)" 
+        (estadoCambiado)="onEstadoCambiado()"
+        (tareaEliminada)="onTareaEliminada()" 
+        (asignarClick)="onAsignarClick(tarea)">
+      </app-tarea-card>
+    </div>
+  </div>
+
+  <!-- COLUMNA PROCESO -->
+  <div class="columna">
+    <div class="columna-header">Proceso</div>
+    <div 
+      [class]="modoVista === 'card' ? 'columna-content' : 'columna-content columna-content-lista'"
+      id="tareasEnProceso" 
+      cdkDropList 
+      [cdkDropListData]="tareasEnProceso"
+      [cdkDropListConnectedTo]="['tareasPendientes', 'tareasTerminadas']"
+      [cdkDropListDisabled]="!puedeEditar" 
+      (cdkDropListDropped)="onDrop($event, 'N')">
+      <p *ngIf="tareasEnProceso.length === 0" class="sin-tareas">Sin tareas en proceso</p>
+      <app-tarea-card 
+        *ngFor="let tarea of tareasEnProceso" 
+        [tarea]="tarea" 
+        [puedeEditar]="puedeEditar"
+        [puedeEliminar]="puedeEliminar" 
+        [puedeAsignar]="puedeAsignar"
+        [modoVista]="modoVista"
+        [cdkDragDisabled]="!puedeEditar" 
+        cdkDrag
+        (tareaClick)="abrirPanelDetalles(tarea.idTarea!)" 
+        (estadoCambiado)="onEstadoCambiado()"
+        (tareaEliminada)="onTareaEliminada()" 
+        (asignarClick)="onAsignarClick(tarea)">
+      </app-tarea-card>
+    </div>
+  </div>
+
+  <!-- COLUMNA TERMINADO -->
+  <div class="columna">
+    <div class="columna-header">Terminado</div>
+    <div 
+      [class]="modoVista === 'card' ? 'columna-content' : 'columna-content columna-content-lista'"
+      id="tareasTerminadas" 
+      cdkDropList 
+      [cdkDropListData]="tareasTerminadas"
+      [cdkDropListConnectedTo]="['tareasPendientes', 'tareasEnProceso']"
+      [cdkDropListDisabled]="!puedeEditar" 
+      (cdkDropListDropped)="onDrop($event, 'C')">
+      <p *ngIf="tareasTerminadas.length === 0" class="sin-tareas">Sin tareas completadas</p>
+      <app-tarea-card 
+        *ngFor="let tarea of tareasTerminadas" 
+        [tarea]="tarea" 
+        [puedeEditar]="puedeEditar"
+        [puedeEliminar]="puedeEliminar" 
+        [puedeAsignar]="puedeAsignar"
+        [modoVista]="modoVista"
+        [cdkDragDisabled]="!puedeEditar" 
+        cdkDrag
+        (tareaClick)="abrirPanelDetalles(tarea.idTarea!)" 
+        (estadoCambiado)="onEstadoCambiado()"
+        (tareaEliminada)="onTareaEliminada()" 
+        (asignarClick)="onAsignarClick(tarea)">
+      </app-tarea-card>
+    </div>
+  </div>
+</div>
+
+<!-- Panel de detalles -->
+<app-panel-detalles 
+  [abierto]="panelAbierto" 
+  [idTarea]="tareaSeleccionada" 
+  [idListaPredeterminada]="idListaActual"
+  [miDiaPredeterminado]="esMiDia" 
+  [puedeEditar]="puedeEditar" 
+  (cerrar)="cerrarPanelDetalles()"
+  (tareaGuardada)="onTareaGuardada()">
+</app-panel-detalles>
+
+<!-- Botón flotante -->
+<button class="btn-flotante" (click)="abrirPanelDetalles()" [disabled]="!puedeEditar"
+  [title]="!puedeEditar ? 'No tienes permisos para agregar tareas' : 'Agregar tarea'">
+  +
+</button>

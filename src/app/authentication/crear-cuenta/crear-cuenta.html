@@ -1,0 +1,295 @@
+<div class="register-container">
+  <!-- Panel Izquierdo - Formulario -->
+  <div class="left-panel">
+    <div class="header-section">
+      <a href="/landing" class="brand-container" style="text-decoration: none; color: inherit">
+        <div class="brand-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="48" height="48">
+            <!-- Fondo del tablero con esquinas redondeadas -->
+            <rect width="200" height="200" rx="32" ry="32" fill="#274690" />
+
+            <!-- Tres círculos superiores (rueditas del tablero) -->
+            <circle cx="42" cy="38" r="8" fill="#FFFFFF" opacity="0.4" />
+            <circle cx="100" cy="38" r="8" fill="#FFFFFF" opacity="0.4" />
+            <circle cx="158" cy="38" r="8" fill="#FFFFFF" opacity="0.4" />
+
+            <!-- Columna 1 - Pendiente (círculo) -->
+            <rect x="25" y="65" width="42" height="115" rx="8" ry="8" fill="#FFFFFF" />
+            <circle cx="46" cy="122" r="10" fill="#274690" />
+
+            <!-- Columna 2 - En Progreso (línea) -->
+            <rect x="79" y="65" width="42" height="115" rx="8" ry="8" fill="#FFFFFF" />
+            <rect x="87" y="118" width="26" height="8" rx="4" ry="4" fill="#274690" />
+
+            <!-- Columna 3 - Completado (check) -->
+            <rect x="133" y="65" width="42" height="115" rx="8" ry="8" fill="#FFFFFF" />
+            <path
+              d="M 143 120 L 151 130 L 165 110"
+              stroke="#274690"
+              stroke-width="6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <div class="brand-name">Taskeer</div>
+      </a>
+    </div>
+
+    <div class="form-section">
+      <div class="form-wrapper">
+        <div class="form-header">
+          <h2>Crea tu cuenta</h2>
+          <p>Únete a Taskeer y gestiona tus proyectos de manera eficiente.</p>
+        </div>
+
+        <form #registerForm="ngForm" (ngSubmit)="onSubmit()">
+          <!-- Mensaje de error -->
+          <div class="error-message" *ngIf="errorMessage">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ errorMessage }}
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Nombre</label>
+              <div class="input-wrapper">
+                <span class="input-icon">
+                  <i class="fas fa-user"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-input"
+                  [(ngModel)]="nombre"
+                  name="nombre"
+                  placeholder="Tu nombre"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Apellido(s)</label>
+              <div class="input-wrapper">
+                <span class="input-icon">
+                  <i class="fas fa-user"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-input"
+                  [(ngModel)]="apellido"
+                  name="apellido"
+                  placeholder="Tu apellido"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Correo electrónico</label>
+            <div class="input-wrapper">
+              <span class="input-icon">
+                <i class="fas fa-envelope"></i>
+              </span>
+              <input
+                type="email"
+                class="form-input"
+                [(ngModel)]="email"
+                name="email"
+                placeholder="estudiante@universidad.edu"
+                required
+                email
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Contraseña</label>
+            <div class="password-wrapper">
+              <div class="input-wrapper">
+                <span class="input-icon">
+                  <i class="fas fa-lock"></i>
+                </span>
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="form-input"
+                  [(ngModel)]="password"
+                  name="password"
+                  placeholder="Mínimo 6 caracteres"
+                  required
+                  minlength="6"
+                />
+                <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
+                  <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Confirmar contraseña</label>
+            <div class="password-wrapper">
+              <div class="input-wrapper">
+                <span class="input-icon">
+                  <i class="fas fa-lock"></i>
+                </span>
+                <input
+                  [type]="showConfirmPassword ? 'text' : 'password'"
+                  class="form-input"
+                  [(ngModel)]="confirmPassword"
+                  name="confirmPassword"
+                  placeholder="Confirma tu contraseña"
+                  required
+                  minlength="6"
+                />
+                <button
+                  type="button"
+                  class="toggle-password"
+                  (click)="toggleConfirmPasswordVisibility()"
+                >
+                  <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkbox-wrapper terms">
+            <input
+              type="checkbox"
+              id="terminos"
+              [(ngModel)]="aceptaTerminos"
+              name="terminos"
+              required
+            />
+            <label for="terminos">
+              Acepto los <a href="#" class="link">Términos y Condiciones</a> y la
+              <a href="#" class="link">Política de Privacidad</a>
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            class="submit-btn"
+            [disabled]="!registerForm.form.valid || isLoading"
+          >
+            <i [class]="isLoading ? 'fas fa-spinner fa-spin' : 'fas fa-user-plus'"></i>
+            {{ isLoading ? 'Creando cuenta...' : 'Crear Cuenta' }}
+          </button>
+
+          <div class="login-text">
+            ¿Ya tienes una cuenta?
+            <button type="button" class="login-link" (click)="onLogin()">Iniciar Sesión</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel Derecho - Ilustración -->
+  <div class="right-panel">
+    <div class="illustration-content">
+      <div class="illustration-header">
+        <h3>Comienza tu viaje</h3>
+        <p>
+          Únete a miles de estudiantes que ya organizan sus tareas de manera efectiva con Taskeer
+        </p>
+      </div>
+
+      <div class="illustration-card">
+        <svg
+          width="100%"
+          height="300"
+          viewBox="0 0 400 300"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <!-- Ilustración de equipo colaborando -->
+          <rect x="30" y="40" width="340" height="220" rx="8" fill="white" opacity="0.95" />
+
+          <!-- Avatares de usuarios -->
+          <circle cx="100" cy="120" r="35" fill="#0052CC" />
+          <path
+            d="M100 110 C100 110 95 110 95 115 C95 118 95 118 95 120 L105 120 C105 118 105 118 105 115 C105 110 100 110 100 110Z M100 105 C103.3 105 106 107.7 106 111 C106 114.3 103.3 117 100 117 C96.7 117 94 114.3 94 111 C94 107.7 96.7 105 100 105Z"
+            fill="white"
+          />
+
+          <circle cx="200" cy="120" r="35" fill="#2684FF" />
+          <path
+            d="M200 110 C200 110 195 110 195 115 C195 118 195 118 195 120 L205 120 C205 118 205 118 205 115 C205 110 200 110 200 110Z M200 105 C203.3 105 206 107.7 206 111 C206 114.3 203.3 117 200 117 C196.7 117 194 114.3 194 111 C194 107.7 196.7 105 200 105Z"
+            fill="white"
+          />
+
+          <circle cx="300" cy="120" r="35" fill="#00875A" />
+          <path
+            d="M300 110 C300 110 295 110 295 115 C295 118 295 118 295 120 L305 120 C305 118 305 118 305 115 C305 110 300 110 300 110Z M300 105 C303.3 105 306 107.7 306 111 C306 114.3 303.3 117 300 117 C296.7 117 294 114.3 294 111 C294 107.7 296.7 105 300 105Z"
+            fill="white"
+          />
+
+          <!-- Líneas conectando usuarios -->
+          <line
+            x1="135"
+            y1="120"
+            x2="165"
+            y2="120"
+            stroke="#0052CC"
+            stroke-width="3"
+            stroke-dasharray="5 5"
+            opacity="0.5"
+          />
+          <line
+            x1="235"
+            y1="120"
+            x2="265"
+            y2="120"
+            stroke="#2684FF"
+            stroke-width="3"
+            stroke-dasharray="5 5"
+            opacity="0.5"
+          />
+
+          <!-- Icono de check grande -->
+          <circle cx="200" cy="200" r="30" fill="#00875A" opacity="0.2" />
+          <circle cx="200" cy="200" r="20" fill="#00875A" />
+          <path
+            d="M192 200 L197 205 L208 192"
+            stroke="white"
+            stroke-width="3"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+
+          <!-- Texto decorativo -->
+          <text
+            x="200"
+            y="245"
+            text-anchor="middle"
+            fill="white"
+            font-size="14"
+            font-weight="600"
+            opacity="0.9"
+          >
+            Colabora en equipo
+          </text>
+        </svg>
+      </div>
+
+      <div class="benefits">
+        <div class="benefit-item">
+          <i class="fas fa-check-circle"></i>
+          <span>Gratis para estudiantes</span>
+        </div>
+        <div class="benefit-item">
+          <i class="fas fa-check-circle"></i>
+          <span>Sin tarjeta de crédito</span>
+        </div>
+        <div class="benefit-item">
+          <i class="fas fa-check-circle"></i>
+          <span>Configuración en 2 minutos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

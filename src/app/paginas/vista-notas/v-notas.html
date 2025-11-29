@@ -1,0 +1,138 @@
+<div class="notas-page-container">
+    <!-- Header -->
+<div class="notas-header">
+    <div class="header-content">
+        <h1 class="titulo-seccion">
+            <i class="fa-solid fa-note-sticky"></i>
+            Notas
+        </h1>
+        <button class="btn-nueva-nota" (click)="abrirModal()">
+            <i class="fas fa-plus"></i>
+            Nueva Nota
+        </button>
+    </div>
+</div>
+
+
+    <!-- Contenido de notas -->
+    <div class="notas-content">
+
+        <!-- Notas Fijadas -->
+        <div class="seccion-notas" *ngIf="notasFijadas.length > 0">
+            <h2 class="subtitulo-seccion">
+                <i class="fa-solid fa-thumbtack"></i>
+                Fijadas
+            </h2>
+            <div class="notas-grid" 
+                 cdkDropList 
+                 id="fijadas" 
+                 [cdkDropListData]="notasFijadas"
+                 (cdkDropListDropped)="drop($event)">
+                
+                <div *ngFor="let nota of notasFijadas" cdkDrag>
+                    <app-nota-card 
+                        [nota]="nota"
+                        (editar)="abrirModal($event)"
+                        (eliminar)="eliminarNota($event)"
+                        (duplicar)="duplicarNota($event)"
+                        (toggleFijar)="toggleFijada($event)">
+                    </app-nota-card>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notas Normales -->
+        <div class="seccion-notas">
+            <h2 class="subtitulo-seccion" *ngIf="notasFijadas.length > 0">
+                <i class="fa-solid fa-file-lines"></i>
+                Otras Notas
+            </h2>
+
+            <div class="notas-grid" 
+                 cdkDropList 
+                 id="normales" 
+                 [cdkDropListData]="notasNormales"
+                 (cdkDropListDropped)="drop($event)">
+                
+                <div *ngFor="let nota of notasNormales" cdkDrag>
+                    <app-nota-card 
+                        [nota]="nota"
+                        (editar)="abrirModal($event)"
+                        (eliminar)="eliminarNota($event)"
+                        (duplicar)="duplicarNota($event)"
+                        (toggleFijar)="toggleFijada($event)">
+                    </app-nota-card>
+                </div>
+            </div>
+
+            <!-- Estado vacío -->
+            <div class="estado-vacio" *ngIf="notasNormales.length === 0 && notasFijadas.length === 0">
+                <i class="bi bi-sticky"></i>
+                <h3>No tienes notas</h3>
+                <p>Crea tu primera nota para comenzar</p>
+                <button class="btn-crear-primera" (click)="abrirModal()">
+                    <i class="bi bi-plus-lg"></i>
+                    Crear Nota
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear/editar nota -->
+    <div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>{{ esEdicion ? 'Editar Nota' : 'Nueva Nota' }}</h2>
+                <button class="btn-cerrar" type="button" (click)="cerrarModal()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="titulo">Título</label>
+                    <input type="text" 
+                           id="titulo" 
+                           class="form-control" 
+                           [(ngModel)]="notaActual.titulo"
+                           placeholder="Título de la nota" 
+                           maxlength="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="contenido">Contenido</label>
+                    <textarea id="contenido" 
+                              class="form-control" 
+                              [(ngModel)]="notaActual.contenido"
+                              placeholder="Escribe aquí el contenido..." 
+                              rows="8"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Color</label>
+                    <div class="colores-grid">
+                        <button *ngFor="let color of coloresDisponibles" 
+                                type="button"
+                                class="color-option"
+                                [class.selected]="notaActual.color === color.valor" 
+                                [style.background-color]="color.valor"
+                                [title]="color.nombre" 
+                                (click)="notaActual.color = color.valor">
+                            <i class="bi bi-check-lg" *ngIf="notaActual.color === color.valor"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancelar" type="button" (click)="cerrarModal()">
+                    Cancelar
+                </button>
+                <button class="btn-guardar" type="button" (click)="guardarNota()">
+                    <i class="bi bi-check-lg"></i>
+                    {{ esEdicion ? 'Actualizar' : 'Crear' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

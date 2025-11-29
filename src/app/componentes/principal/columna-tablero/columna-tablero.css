@@ -1,0 +1,416 @@
+.columna-tablero {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 180px);
+    max-height: 800px;
+    overflow: hidden;
+}
+
+/* ========== HEADER PERSONALIZADO ========== */
+.lista-header {
+    padding: 16px 20px;
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0; /* Para que funcione el text-overflow */
+    position: relative;
+}
+
+.lista-emoji {
+    font-size: 28px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.lista-icono {
+    font-size: 24px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.lista-nombre {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    /* ✅ Añadido para los tres puntos */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0; /* ✅ Los botones no se comprimen */
+    position: relative;
+}
+
+/* ========== MENÚ DE TRES PUNTOS ========== */
+.btn-menu-dots {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.btn-menu-dots:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.menu-dropdown {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 160px;
+    z-index: 1000;
+    overflow: hidden;
+    animation: fadeInDown 0.2s ease;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.menu-option {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    color: #172b4d;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.menu-option:hover {
+    background: #f4f5f7;
+}
+
+.menu-option i {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.menu-option.compartir i {
+    color: #0052cc;
+}
+
+.menu-option.editar i {
+    color: #258e48;
+}
+
+.menu-option.eliminar {
+    color: #de350b;
+}
+
+.menu-option.eliminar:hover {
+    background: #ffebe6;
+}
+
+.menu-option.eliminar i {
+    color: #de350b;
+}
+
+/* ========== PROGRESS BAR ========== */
+.progress-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: white;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* ========== CONTENEDOR DE TAREAS ========== */
+.tareas-contenedor {
+    padding: 16px;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tareas-contenedor::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tareas-contenedor::-webkit-scrollbar-thumb {
+    background: #c1c7d0;
+    border-radius: 3px;
+}
+
+.tareas-seccion {
+    display: flex;
+    flex-direction: column;
+}
+
+.tareas-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 40px;
+}
+
+/* ========== TAREA ITEM ========== */
+.tarea-item {
+    background: white;
+    border: 2px solid #e4e6ea;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+
+.tarea-item:hover {
+    border-color: #0052cc;
+    box-shadow: 0 2px 8px rgba(0, 82, 204, 0.15);
+    transform: translateY(-1px);
+}
+
+.tarea-item.importante {
+    border-left: 4px solid #ff9933;
+    /* ✅ ELIMINADO: background: #fffaf5; */
+}
+
+.tarea-item.completada {
+    opacity: 0.7;
+    background: #f8f9fa;
+}
+
+.tarea-item.completada .tarea-nombre {
+    text-decoration: line-through;
+    color: #7a869a;
+}
+
+.icono-importante {
+    color: #ff9933;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.tarea-nombre {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #172b4d;
+    font-weight: 500;
+}
+
+/* ========== SEPARADOR ========== */
+.separador {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #e4e6ea, transparent);
+    margin: 8px 0;
+}
+
+/* ========== SIN TAREAS ========== */
+.sin-tareas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    gap: 12px;
+    color: #7a869a;
+    text-align: center;
+}
+
+.sin-tareas i {
+    font-size: 48px;
+    opacity: 0.3;
+}
+
+.sin-tareas p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* ========== LOADING ========== */
+.cargando-lista {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    gap: 10px;
+    color: #7a869a;
+}
+
+.spinner-small {
+    width: 30px;
+    height: 30px;
+    border: 3px solid #e4e6ea;
+    border-top-color: #0052cc;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ========== DRAG & DROP ========== */
+.cdk-drag-preview {
+    opacity: 0.9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.cdk-drag-placeholder {
+    opacity: 0.3;
+    border: 2px dashed #0052cc;
+    background: #f4f5f7;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.tareas-lista.cdk-drop-list-dragging .tarea-item:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+    .lista-nombre {
+        font-size: 16px;
+    }
+
+    .tarea-item {
+        font-size: 13px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .columna-tablero {
+        height: auto;
+        max-height: 600px;
+    }
+
+    .tareas-contenedor {
+        max-height: 400px;
+    }
+}
+
+/* ========== BADGE IMPORTANTE ========== */
+.badge-importante {
+    /* ✅ ACTUALIZADO: Estrella sin relleno, solo el borde dorado */
+    background: transparent;
+    color: #fbbf24; /* Color dorado suave */
+    padding: 2px 6px; /* ✅ Menos padding */
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: normal;
+    /*  ELIMINADA: animation: pulseImportant 2s ease-in-out infinite; */
+    border: none;
+    flex-shrink: 0;
+    margin-left: auto; /*  Empuja la estrella a la derecha */
+}
+
+/*  ELIMINADA la animación pulseImportant */
+
+.badge-importante i {
+    color: #fbbf24; /* Color dorado más suave, no saturado */
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+/* ========== LISTA IMPORTANTE - EFECTOS VISUALES ========== */
+.columna-tablero.lista-importante {
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.25), 0 0 0 2px rgba(255, 193, 7, 0.15);
+}
+
+.columna-tablero.lista-importante .lista-header {
+    position: relative;
+}
+
+.columna-tablero.lista-importante .lista-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #FFC400 0%, #FFD740 100%);
+    border-radius: 12px 12px 0 0;
+}

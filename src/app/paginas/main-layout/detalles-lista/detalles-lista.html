@@ -1,0 +1,90 @@
+<div class="detalle-lista-container">
+  <div class="lista-header" *ngIf="nombreLista">
+    <div class="header-top">
+      <h2>
+        <span class="lista-icono" [style.background-color]="colorLista">
+          <i [class]="obtenerClaseIcono(iconoLista)"></i>
+        </span>
+        {{ nombreLista }}
+      </h2>
+
+      <div class="header-actions">
+        <!-- ✅ AVATARES - SIEMPRE VISIBLES si hay usuarios compartidos -->
+        <div class="usuarios-avatares" *ngIf="usuariosCompartidos.length > 0">
+          <div *ngFor="let usuario of usuariosCompartidos.slice(0, 5)" class="avatar"
+            [title]="usuario.nombre + ' (' + usuario.rol + ')'" (click)="abrirPerfilUsuario(usuario)">
+            {{ obtenerIniciales(usuario.nombre) }}
+          </div>
+          <div class="avatar-mas" *ngIf="usuariosCompartidos.length > 5" (click)="mostrarTodosUsuarios()">
+            +{{ usuariosCompartidos.length - 5 }}
+          </div>
+        </div>
+
+        <!-- ✅ BOTONES - Solo para propietarios/admins -->
+        <ng-container *ngIf="esPropietario || esAdmin">
+          <button *ngIf="puedeAsignarTareas()" class="btn-asignar-tareas" (click)="abrirModalAsignar()"
+            title="Asignar tareas a usuarios">
+            <i class="fas fa-user-check"></i>
+            Asignar tareas
+          </button>
+
+          <button class="btn-gestionar-usuarios" (click)="abrirModalUsuarios()">
+            <i class="fas fa-cog"></i>
+            Gestionar usuarios
+          </button>
+        </ng-container>
+      </div>
+    </div>
+
+    <p *ngIf="descripcionLista" class="lista-descripcion">{{ descripcionLista }}</p>
+    <div *ngIf="!puedeEditarTareas()" class="alert-solo-lectura">
+      <i class="fas fa-eye"></i>
+      <span>Estás viendo esta lista en modo de <strong>solo lectura</strong></span>
+    </div>
+  </div>
+
+  <app-columnas [puedeEditar]="puedeEditarTareas()" [puedeEliminar]="puedeEliminarTareas()"
+    [puedeAsignar]="puedeAsignarTareas()" (abrirModalAsignar)="abrirModalAsignarTarea($event)">
+  </app-columnas>
+
+  <!-- Botón flotante de chat (solo si la lista está compartida) -->
+  <button *ngIf="mostrarBotonChat" class="chat-fab" (click)="toggleChat()"
+    [title]="chatAbierto ? 'Cerrar chat' : 'Abrir chat del equipo'">
+    <i class="fas fa-comments"></i>
+    <span class="chat-badge" *ngIf="mensajesNoLeidos > 0 && !chatAbierto">
+      {{ getMensajesNoLeidosDisplay() }}
+    </span>
+  </button>
+
+  <!-- Card flotante del chat -->
+  <div class="chat-overlay" *ngIf="chatAbierto">
+    <div class="chat-panel">
+      <div class="chat-panel-header">
+        <h3>
+          <i class="fas fa-comments"></i>
+          Chat de equipo
+        </h3>
+        <button class="btn-cerrar-chat" (click)="toggleChat()" title="Cerrar chat">
+          <i class="fas fa-chevron-down"></i>
+        </button>
+      </div>
+      <div class="chat-panel-content">
+        <app-chat [idLista]="idLista" [usuarioActual]="usuarioActual"> </app-chat>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de gestión de usuarios -->
+  <app-modal-usuarios-lista [isOpen]="modalUsuariosAbierto" [listaId]="idLista" [esPropietario]="esPropietario"
+    [esAdmin]="esAdmin" (close)="cerrarModalUsuarios()" (actualizado)="onUsuariosActualizados()">
+  </app-modal-usuarios-lista>
+
+  <!-- Modal de asignar tarea -->
+  <app-modal-asignar-tarea [isOpen]="modalAsignarAbierto" [tarea]="tareaSeleccionada" [idLista]="idLista"
+    (close)="cerrarModalAsignar()" (asignado)="onTareaAsignada()">
+  </app-modal-asignar-tarea>
+  <!-- Modal de perfil de usuario -->
+  <app-modal-perfil-usuario [isOpen]="modalPerfilAbierto" [usuario]="usuarioSeleccionado"
+    (close)="cerrarPerfilUsuario()">
+  </app-modal-perfil-usuario>
+</div>

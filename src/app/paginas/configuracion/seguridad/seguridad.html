@@ -1,0 +1,194 @@
+<!-- Sección de Cambio de Contraseña -->
+<div class="seccion-card">
+    <div class="seccion-header">
+        <h2>
+            <i class="fas fa-key"></i>
+            Cambiar Contraseña
+        </h2>
+        <p class="seccion-descripcion">
+            Actualiza tu contraseña para mantener tu cuenta segura
+        </p>
+    </div>
+
+    <form [formGroup]="formPassword" (ngSubmit)="onSubmitForm(); $event.stopPropagation()">
+        <div class="password-form">
+            <!-- Contraseña actual - SIEMPRE VISIBLE -->
+            <div class="form-group">
+                <label for="passwordActual">
+                    <i class="fas fa-lock"></i>
+                    Contraseña actual
+                </label>
+                <div class="input-password">
+                    <input [type]="mostrarPasswordActual ? 'text' : 'password'" id="passwordActual"
+                        formControlName="passwordActual" placeholder="Ingresa tu contraseña actual"
+                        [disabled]="estadoFlujo === 'codigo_verificado' || estadoFlujo === 'cambiando'" />
+                    <button type="button" class="toggle-password" 
+                        (click)="mostrarPasswordActual = !mostrarPasswordActual; $event.stopPropagation()">
+                        <i [class]="mostrarPasswordActual ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </button>
+                </div>
+                <span class="form-error"
+                    *ngIf="formPassword.get('passwordActual')?.invalid && formPassword.get('passwordActual')?.touched">
+                    La contraseña actual es requerida
+                </span>
+                <!-- Indicador de código enviado -->
+                <span class="form-hint" *ngIf="estadoFlujo === 'esperando_codigo'">
+                    <i class="fas fa-envelope"></i>
+                    Código de verificación enviado a tu email
+                </span>
+            </div>
+
+            <!-- Nueva contraseña - SOLO VISIBLE DESPUÉS DE VERIFICAR CÓDIGO -->
+            <div class="form-group" *ngIf="estadoFlujo === 'codigo_verificado' || estadoFlujo === 'cambiando'">
+                <label for="passwordNuevo">
+                    <i class="fas fa-lock"></i>
+                    Nueva contraseña
+                </label>
+                <div class="input-password">
+                    <input [type]="mostrarPasswordNuevo ? 'text' : 'password'" id="passwordNuevo"
+                        formControlName="passwordNuevo" placeholder="Ingresa tu nueva contraseña" />
+                    <button type="button" class="toggle-password" 
+                        (click)="mostrarPasswordNuevo = !mostrarPasswordNuevo; $event.stopPropagation()">
+                        <i [class]="mostrarPasswordNuevo ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </button>
+                </div>
+                <span class="form-error"
+                    *ngIf="formPassword.get('passwordNuevo')?.invalid && formPassword.get('passwordNuevo')?.touched">
+                    La contraseña debe tener al menos 6 caracteres
+                </span>
+            </div>
+
+            <!-- Confirmar nueva contraseña - SOLO VISIBLE DESPUÉS DE VERIFICAR CÓDIGO -->
+            <div class="form-group" *ngIf="estadoFlujo === 'codigo_verificado' || estadoFlujo === 'cambiando'">
+                <label for="passwordConfirmar">
+                    <i class="fas fa-lock"></i>
+                    Confirmar nueva contraseña
+                </label>
+                <div class="input-password">
+                    <input [type]="mostrarPasswordConfirmar ? 'text' : 'password'" id="passwordConfirmar"
+                        formControlName="passwordConfirmar" placeholder="Confirma tu nueva contraseña" />
+                    <button type="button" class="toggle-password"
+                        (click)="mostrarPasswordConfirmar = !mostrarPasswordConfirmar; $event.stopPropagation()">
+                        <i [class]="mostrarPasswordConfirmar ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </button>
+                </div>
+                <span class="form-error"
+                    *ngIf="formPassword.hasError('noCoinciden') && formPassword.get('passwordConfirmar')?.touched">
+                    Las contraseñas no coinciden
+                </span>
+            </div>
+
+            <!-- Requisitos de contraseña - SOLO VISIBLE DESPUÉS DE VERIFICAR CÓDIGO -->
+            <div class="password-requisitos" *ngIf="estadoFlujo === 'codigo_verificado' || estadoFlujo === 'cambiando'">
+                <p class="requisitos-titulo">
+                    <i class="fas fa-info-circle"></i>
+                    Requisitos de la contraseña:
+                </p>
+                <ul class="requisitos-lista">
+                    <li [class.cumplido]="validarLongitud()">
+                        <i [class]="validarLongitud() ? 'fas fa-check-circle' : 'fas fa-circle'"></i>
+                        Mínimo 6 caracteres
+                    </li>
+                    <li [class.cumplido]="validarMayuscula()">
+                        <i [class]="validarMayuscula() ? 'fas fa-check-circle' : 'fas fa-circle'"></i>
+                        Al menos una letra mayúscula
+                    </li>
+                    <li [class.cumplido]="validarMinuscula()">
+                        <i [class]="validarMinuscula() ? 'fas fa-check-circle' : 'fas fa-circle'"></i>
+                        Al menos una letra minúscula
+                    </li>
+                    <li [class.cumplido]="validarNumero()">
+                        <i [class]="validarNumero() ? 'fas fa-check-circle' : 'fas fa-circle'"></i>
+                        Al menos un número
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="form-actions">
+            <button type="button" class="btn-secundario" 
+                (click)="cancelarCambiosPassword(); $event.stopPropagation()">
+                <i class="fas fa-times"></i>
+                Cancelar
+            </button>
+            <button type="submit" class="btn-primario" [disabled]="deshabilitarBotonPrincipal">
+                <i [class]="guardandoPassword ? 'fas fa-spinner fa-spin' : 'fas fa-key'"></i>
+                {{ textoBotonPrincipal }}
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Modal de Verificación -->
+<div class="modal-verificacion-overlay" *ngIf="mostrarModalVerificacion" (click)="onModalOverlayClick($event)">
+    <div class="modal-verificacion-container" (click)="onModalContainerClick($event)">
+        <div class="modal-verificacion-header">
+            <div class="modal-icon-wrapper">
+                <i class="fas fa-envelope-circle-check"></i>
+            </div>
+            <h3>Verifica tu email</h3>
+            <button type="button" class="btn-cerrar-modal" 
+                (click)="cerrarModalVerificacion(); $event.stopPropagation()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="modal-verificacion-body">
+            <p class="modal-descripcion">
+                Hemos enviado un código de verificación a<br>
+                <strong>{{ emailOfuscado }}</strong>
+            </p>
+
+            <!-- Mensajes -->
+            <div class="modal-message success-message" *ngIf="modalSuccessMessage">
+                <i class="fas fa-circle-check"></i>
+                {{ modalSuccessMessage }}
+            </div>
+
+            <div class="modal-message error-message" *ngIf="modalErrorMessage">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ modalErrorMessage }}
+            </div>
+
+            <!-- Inputs de código -->
+            <div class="modal-code-inputs">
+                <input *ngFor="let digit of codigoVerificacion; let i = index" type="text" maxlength="1"
+                    class="modal-code-input" [id]="'modal-digit-' + i" [value]="digit" (input)="onModalDigitInput($event, i)"
+                    (keydown)="onModalDigitKeyDown($event, i)" (paste)="i === 0 ? onModalPaste($event) : null"
+                    [disabled]="verificandoCodigo" autocomplete="off">
+            </div>
+
+            <!-- Información de intentos -->
+            <div class="modal-attempts-info" *ngIf="modalErrorMessage && modalIntentosRestantes > 0">
+                <i class="fas fa-info-circle"></i>
+                Te quedan {{ modalIntentosRestantes }} intento(s)
+            </div>
+
+            <!-- Botones -->
+            <div class="modal-verificacion-actions">
+                <button type="button" class="btn-modal-primario" 
+                    (click)="verificarCodigoModal(); $event.stopPropagation()"
+                    [disabled]="verificandoCodigo">
+                    <i [class]="verificandoCodigo ? 'fas fa-spinner fa-spin' : 'fas fa-check-circle'"></i>
+                    {{ verificandoCodigo ? 'Verificando...' : 'Verificar Código' }}
+                </button>
+
+                <button type="button" class="btn-modal-secundario" 
+                    (click)="reenviarCodigoModal(); $event.stopPropagation()"
+                    [disabled]="reenviandoCodigoModal || modalCooldownSeconds > 0">
+                    <i [class]="reenviandoCodigoModal ? 'fas fa-spinner fa-spin' : 'fas fa-rotate-right'"></i>
+                    <span *ngIf="modalCooldownSeconds > 0">
+                        Espera {{ modalCooldownSeconds }}s
+                    </span>
+                    <span *ngIf="modalCooldownSeconds === 0 && !reenviandoCodigoModal">
+                        Reenviar código
+                    </span>
+                    <span *ngIf="reenviandoCodigoModal">
+                        Enviando...
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

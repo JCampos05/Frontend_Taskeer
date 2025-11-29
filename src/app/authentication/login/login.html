@@ -1,0 +1,209 @@
+<div class="login-container">
+  <!-- Panel Izquierdo - Formulario -->
+  <div class="left-panel">
+    <div class="header-section">
+      <a href="/landing" class="brand-container" style="text-decoration: none; color: inherit">
+        <div class="brand-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="48" height="48">
+            <!-- Fondo del tablero con esquinas redondeadas -->
+            <rect width="200" height="200" rx="32" ry="32" fill="#274690" />
+
+            <!-- Tres círculos superiores (rueditas del tablero) -->
+            <circle cx="42" cy="38" r="8" fill="#FFFFFF" opacity="0.4" />
+            <circle cx="100" cy="38" r="8" fill="#FFFFFF" opacity="0.4" />
+            <circle cx="158" cy="38" r="8" fill="#FFFFFF" opacity="0.4" />
+
+            <!-- Columna 1 - Pendiente (círculo) -->
+            <rect x="25" y="65" width="42" height="115" rx="8" ry="8" fill="#FFFFFF" />
+            <circle cx="46" cy="122" r="10" fill="#274690" />
+
+            <!-- Columna 2 - En Progreso (línea) -->
+            <rect x="79" y="65" width="42" height="115" rx="8" ry="8" fill="#FFFFFF" />
+            <rect x="87" y="118" width="26" height="8" rx="4" ry="4" fill="#274690" />
+
+            <!-- Columna 3 - Completado (check) -->
+            <rect x="133" y="65" width="42" height="115" rx="8" ry="8" fill="#FFFFFF" />
+            <path
+              d="M 143 120 L 151 130 L 165 110"
+              stroke="#274690"
+              stroke-width="6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <div class="brand-name">Taskeer</div>
+      </a>
+    </div>
+
+    <div class="form-section">
+      <div class="form-wrapper">
+        <div class="form-header">
+          <h2>¡Bienvenido de nuevo!</h2>
+          <p>Inicia sesión para continuar.</p>
+        </div>
+
+        <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+          <!-- Mensaje de error -->
+          <div class="error-message" *ngIf="errorMessage">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ errorMessage }}
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Correo electrónico</label>
+            <div class="input-wrapper">
+              <span class="input-icon">
+                <i class="fas fa-user"></i>
+              </span>
+              <input
+                type="email"
+                class="form-input"
+                [(ngModel)]="email"
+                name="email"
+                placeholder="estudiante@universidad.edu"
+                required
+                email
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Contraseña</label>
+            <div class="password-wrapper">
+              <div class="input-wrapper">
+                <span class="input-icon">
+                  <i class="fas fa-lock"></i>
+                </span>
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="form-input"
+                  [(ngModel)]="password"
+                  name="password"
+                  placeholder="Ingresa tu contraseña"
+                  required
+                  minlength="6"
+                />
+                <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
+                  <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <div class="checkbox-wrapper">
+              <input type="checkbox" id="remember" [(ngModel)]="remember" name="remember" />
+              <label for="remember">Recuérdame</label>
+            </div>
+            <a href="#" class="forgot-link" (click)="onForgotPassword(); $event.preventDefault()">
+              ¿Olvidaste tu contraseña?
+            </a>
+          </div>
+
+          <button type="submit" class="submit-btn" [disabled]="!loginForm.form.valid || isLoading">
+            <i [class]="isLoading ? 'fas fa-spinner fa-spin' : 'fas fa-sign-in-alt'"></i>
+            {{ isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
+          </button>
+
+          <div class="signup-text">
+            ¿No tienes una cuenta?
+            <button type="button" class="signup-link" (click)="onSignup()">Regístrate</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel Derecho - Ilustración -->
+  <div class="right-panel">
+    <div class="illustration-content">
+      <div class="illustration-header">
+        <h3>Conecta con tu comunidad</h3>
+        <p>Organiza, prioriza y completa tus tareas académicas de manera eficiente con TaskFlow</p>
+      </div>
+
+      <div class="illustration-card">
+        <svg
+          width="100%"
+          height="300"
+          viewBox="0 0 400 300"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <!-- Tablero Kanban -->
+          <rect x="30" y="40" width="340" height="220" rx="8" fill="white" opacity="0.95" />
+
+          <!-- Columna 1: To Do -->
+          <rect x="45" y="55" width="95" height="190" rx="6" fill="#F4F5F7" />
+          <rect x="52" y="62" width="81" height="20" rx="4" fill="#0052CC" />
+          <text x="92.5" y="76" text-anchor="middle" fill="white" font-size="11" font-weight="600">
+            TO DO
+          </text>
+
+          <rect x="52" y="90" width="81" height="35" rx="4" fill="white" opacity="0.9" />
+          <rect x="52" y="132" width="81" height="35" rx="4" fill="white" opacity="0.9" />
+          <rect x="52" y="174" width="81" height="35" rx="4" fill="white" opacity="0.9" />
+
+          <!-- Columna 2: In Progress -->
+          <rect x="152.5" y="55" width="95" height="190" rx="6" fill="#F4F5F7" />
+          <rect x="159.5" y="62" width="81" height="20" rx="4" fill="#2684FF" />
+          <text x="200" y="76" text-anchor="middle" fill="white" font-size="11" font-weight="600">
+            IN PROGRESS
+          </text>
+
+          <rect x="159.5" y="90" width="81" height="35" rx="4" fill="white" opacity="0.9" />
+          <rect x="159.5" y="132" width="81" height="35" rx="4" fill="white" opacity="0.9" />
+
+          <!-- Columna 3: Done -->
+          <rect x="260" y="55" width="95" height="190" rx="6" fill="#F4F5F7" />
+          <rect x="267" y="62" width="81" height="20" rx="4" fill="#00875A" />
+          <text x="307.5" y="76" text-anchor="middle" fill="white" font-size="11" font-weight="600">
+            DONE
+          </text>
+
+          <rect x="267" y="90" width="81" height="35" rx="4" fill="white" opacity="0.9" />
+          <circle cx="275" cy="107.5" r="6" fill="#00875A" />
+          <path
+            d="M273 107.5 L275.5 110 L279 105"
+            stroke="white"
+            stroke-width="1.5"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+
+          <!-- Decoración: Usuario avatar -->
+          <circle cx="335" cy="25" r="12" fill="#0052CC" />
+          <path
+            d="M335 22 C335 22 333 22 333 24 C333 25 333 25 333 26 L337 26 C337 25 337 25 337 24 C337 22 335 22 335 22Z M335 20 C336.1 20 337 20.9 337 22 C337 23.1 336.1 24 335 24 C333.9 24 333 23.1 333 22 C333 20.9 333.9 20 335 20Z"
+            fill="white"
+          />
+
+          <!-- Decoración: Líneas de conexión -->
+          <line
+            x1="140"
+            y1="107.5"
+            x2="152.5"
+            y2="107.5"
+            stroke="#0052CC"
+            stroke-width="2"
+            stroke-dasharray="3 3"
+            opacity="0.4"
+          />
+          <line
+            x1="247.5"
+            y1="107.5"
+            x2="260"
+            y2="107.5"
+            stroke="#2684FF"
+            stroke-width="2"
+            stroke-dasharray="3 3"
+            opacity="0.4"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>

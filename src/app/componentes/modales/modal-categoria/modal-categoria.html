@@ -1,0 +1,142 @@
+<div class="modal-overlay" *ngIf="visible" (click)="cerrar()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ categoriaEditando ? 'Editar' : 'Nueva' }} Categoría</h3>
+      <button class="close-btn" (click)="cerrar()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Formulario de crear/editar categoría -->
+      <div class="form-section">
+        <h4 class="section-title">
+          <i class="fas fa-folder"></i>
+          {{ categoriaEditando ? 'Editar Categoría' : 'Crear Nueva Categoría' }}
+        </h4>
+        
+        <div class="form-group">
+          <label for="nombreCategoria">Nombre de la categoría</label>
+          <input 
+            type="text" 
+            id="nombreCategoria"
+            [(ngModel)]="nombreCategoria"
+            placeholder="Ej: Trabajo, Personal, Estudios..."
+            class="form-input"
+            autofocus
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="toggle-label">
+            <div class="toggle-switch">
+              <input 
+                type="checkbox" 
+                id="compartible" 
+                [(ngModel)]="compartible"
+                class="toggle-input"
+              />
+              <span class="toggle-slider"></span>
+            </div>
+            <div class="toggle-text">
+              <span class="toggle-title">
+                <i class="fas fa-share-nodes"></i> 
+                Hacer esta categoría compartible
+              </span>
+              <span class="toggle-description">
+                Las categorías compartibles pueden ser accedidas por otros usuarios mediante una clave
+              </span>
+            </div>
+          </label>
+        </div>
+
+        <!-- Botón de compartir si ya está guardada y es compartible -->
+        <div class="compartir-section" *ngIf="categoriaEditando && compartible">
+          <button class="btn-compartir-accion" (click)="abrirModalCompartir()">
+            <i class="fas fa-key"></i>
+            {{ claveCompartir ? 'Ver clave de compartir' : 'Generar clave para compartir' }}
+          </button>
+          
+          <!-- Botón de descompartir -->
+          <button class="btn-descompartir" (click)="abrirModalDescompartir()">
+            <i class="fas fa-ban"></i>
+            Descompartir categoría
+          </button>
+          
+          <p class="help-text" *ngIf="claveCompartir">
+            <i class="fas fa-info-circle"></i>
+            Esta categoría ya tiene una clave generada
+          </p>
+        </div>
+      </div>
+
+      <!-- Separador -->
+      <div class="separator">
+        <span>o</span>
+      </div>
+
+      <!-- ✅ NUEVA SECCIÓN: Unirse a categoría compartida -->
+      <div class="form-section">
+        <h4 class="section-title">
+          <i class="fas fa-user-plus"></i>
+          Unirse a Categoría Compartida
+        </h4>
+        
+        <p class="help-text">
+          <i class="fas fa-info-circle"></i>
+          Si alguien compartió una categoría contigo, ingresa la clave aquí
+        </p>
+
+        <div class="join-section">
+          <div class="form-group">
+            <label for="claveUnirse">Clave de categoría compartida</label>
+            <div class="input-with-button">
+              <input 
+                type="text" 
+                id="claveUnirse"
+                [(ngModel)]="claveUnirse"
+                placeholder="Ej: 1LMF8JZP"
+                class="form-input"
+                [class.input-error]="errorClaveUnirse"
+                (input)="errorClaveUnirse = ''"
+                maxlength="8"
+              />
+              <button 
+                class="btn-unirse" 
+                (click)="unirseCategoria()"
+                [disabled]="!claveUnirse || claveUnirse.length < 6 || procesandoUnirse"
+              >
+                <i class="fas fa-link" *ngIf="!procesandoUnirse"></i>
+                <i class="fas fa-spinner fa-spin" *ngIf="procesandoUnirse"></i>
+                {{ procesandoUnirse ? 'Uniéndose...' : 'Unirse' }}
+              </button>
+            </div>
+            <span class="error-message" *ngIf="errorClaveUnirse">
+              <i class="fas fa-exclamation-circle"></i>
+              {{ errorClaveUnirse }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="cerrar()">
+        <i class="fas fa-times"></i>
+        Cancelar
+      </button>
+      <button class="btn-save" (click)="guardar()" *ngIf="!categoriaEditando || nombreCategoria !== categoriaEditando.nombre">
+        <i class="fas fa-check"></i>
+        {{ categoriaEditando ? 'Actualizar' : 'Crear' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de compartir -->
+<app-modal-compartir 
+  [isOpen]="modalCompartirAbierto"
+  [tipo]="'categoria'"
+  [itemId]="categoriaParaCompartir?.idCategoria"
+  [itemNombre]="categoriaParaCompartir?.nombre"
+  (close)="cerrarModalCompartir()"
+  (compartido)="alCompartir($event)">
+</app-modal-compartir>

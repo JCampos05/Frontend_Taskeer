@@ -1,0 +1,210 @@
+<div class="vista-container">
+    <div class="vista-header">
+        <div class="header-left">
+            <h2><i class="fas fa-list"></i> Mis listas</h2>
+            <p>Todas tus listas organizadas</p>
+        </div>
+    </div>
+
+    <!-- Estado de carga -->
+    <div *ngIf="isLoading" class="loading-state">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Cargando listas...</p>
+    </div>
+
+    <!-- Mensaje de error -->
+    <div *ngIf="errorMessage && !isLoading" class="error-state">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>{{ errorMessage }}</p>
+        <button (click)="recargarListas()" class="btn-retry">
+            <i class="fas fa-redo"></i> Reintentar
+        </button>
+    </div>
+
+    <!-- Grid de listas -->
+    <div *ngIf="!isLoading && !errorMessage" class="listas-grid">
+        <div *ngFor="let lista of listas" class="lista-card">
+            <!--pre style="font-size: 10px;">{{ {nombre: lista.nombre, compartible: lista.compartible} | json }}</!--pre>
+            <!-- Contenido clicable -->
+            <div class="lista-content" (click)="abrirLista(lista.idLista!)">
+                <div class="lista-icon" [style.background-color]="lista.color || '#f4f5f7'">
+                    <span *ngIf="esEmoji(lista.icono)" style="font-size: 24px">
+                        {{ lista.icono }}
+                    </span>
+                    <i *ngIf="!esEmoji(lista.icono)" [class]="obtenerClaseIcono(lista.icono)"> </i>
+                </div>
+                <div class="lista-info">
+                    <h3>{{ lista.nombre }}</h3>
+                    <span class="lista-categoria" *ngIf="lista.nombreCategoria">
+                        <i class="fas fa-folder"></i> {{ lista.nombreCategoria }}
+                    </span>
+                    <span class="lista-sin-categoria" *ngIf="!lista.nombreCategoria">
+                        <i class="fas fa-folder-open"></i> Sin categoría
+                    </span>
+                </div>
+
+                <!--  BADGES: Mostrar AMBOS si aplican -->
+                <div class="lista-badges-container">
+                    <div class="lista-badge badge-importante" *ngIf="lista.importante">
+                        <i class="fas fa-star"></i> Importante
+                    </div>
+                    <div class="lista-badge badge-compartida" *ngIf="lista.compartible">
+                        <i class="fas fa-users"></i> Compartida
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones -->
+            <div class="lista-acciones">
+                <!-- BotÃ³n compartir (solo si la lista es compartible) -->
+                <button (click)="abrirModalCompartir($event, lista)" class="btn-accion btn-compartir"
+                    [class.active]="lista.compartible"
+                    [title]="lista.compartible ? 'Gestionar compartir' : 'Compartir lista'">
+                    <i [class]="lista.compartible ? 'fas fa-users' : 'fas fa-share-alt'"></i>
+                </button>
+
+                <button (click)="toggleImportante($event, lista)" class="btn-accion btn-importante"
+                    [class.active]="lista.importante"
+                    [title]="lista.importante ? 'Quitar de importantes' : 'Marcar como importante'">
+                    <i class="fas fa-star"></i>
+                </button>
+
+                <button (click)="editarLista($event, lista)" class="btn-accion btn-editar" title="Editar lista">
+                    <i class="fas fa-edit"></i>
+                </button>
+
+                <button (click)="confirmarEliminar($event, lista)" class="btn-accion btn-eliminar"
+                    title="Eliminar lista">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Sin listas -->
+        <div *ngIf="listas.length === 0" class="sin-listas">
+            <i class="fas fa-list"></i>
+            <p>No tienes listas creadas</p>
+            <small>Crea tu primera lista desde el sidebar</small>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div *ngIf="listaAEliminar" class="modal-overlay" (click)="cancelarEliminar()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h3><i class="fas fa-exclamation-triangle"></i> Confirmar eliminación</h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                ¿Estás seguro que deseas eliminar la lista <strong>"{{ listaAEliminar.nombre }}"</strong>?
+            </p>
+            <p class="advertencia">
+                Esta acción también eliminará todas las tareas asociadas y no se puede deshacer.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button (click)="cancelarEliminar()" class="btn-cancelar">
+                <i class="fas fa-times"></i> Cancelar
+            </button>
+            <button (click)="eliminarLista()" class="btn-confirmar-eliminar">
+                <i class="fas fa-trash"></i> Eliminar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de ediciÃ³n -->
+<div *ngIf="listaAEditar" class="modal-overlay" (click)="cancelarEdicion()">
+    <div class="modal-content modal-editar" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h3><i class="fas fa-edit"></i> Editar lista</h3>
+        </div>
+        <div class="modal-body">
+            <form (submit)="guardarEdicion($event)">
+                <!-- Nombre -->
+                <div class="form-group">
+                    <label>Nombre de la lista</label>
+                    <input type="text" [(ngModel)]="listaAEditar.nombre" name="nombre" class="form-control"
+                        placeholder="Ej: Tareas del dÃ­a" required autofocus />
+                </div>
+
+                <!-- Selector de Color -->
+                <div class="form-group">
+                    <label>Color</label>
+                    <div class="color-selector">
+                        <!-- Colores predefinidos -->
+                        <div class="color-predefinidos">
+                            <div *ngFor="let color of coloresPredefinidos" class="color-option"
+                                [style.background-color]="color.hex" [class.selected]="listaAEditar.color === color.hex"
+                                [title]="color.nombre" (click)="listaAEditar.color = color.hex">
+                                <i *ngIf="listaAEditar.color === color.hex" class="fas fa-check"></i>
+                            </div>
+                        </div>
+
+                        <!-- Selector de color personalizado -->
+                        <div class="color-personalizado">
+                            <label class="color-picker-label">
+                                <input type="color" [(ngModel)]="listaAEditar.color" name="color"
+                                    class="color-picker-input" />
+                                <span class="color-picker-button">
+                                    <i class="fas fa-palette"></i>
+                                    Color personalizado
+                                </span>
+                            </label>
+                            <div class="color-preview" [style.background-color]="listaAEditar.color">
+                                <span>{{ listaAEditar.color }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selector de Icono -->
+                <div class="form-group">
+                    <label>Icono</label>
+
+                    <!-- PestaÃ±as de categorÃ­as -->
+                    <div class="icono-categorias">
+                        <button *ngFor="let categoria of categorias" type="button" class="categoria-tab"
+                            [class.active]="categoriaSeleccionada === categoria"
+                            (click)="categoriaSeleccionada = categoria">
+                            {{ categoria }}
+                        </button>
+                    </div>
+
+                    <!-- Grid de iconos -->
+                    <div class="icono-grid">
+                        <div *ngFor="let item of iconosFiltrados" class="icono-option"
+                            [class.selected]="listaAEditar.icono === item.icono"
+                            (click)="listaAEditar.icono = item.icono" [title]="item.icono">
+                            <i class="fas" [ngClass]="item.icono"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Marcar como importante -->
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" [(ngModel)]="listaAEditar.importante" name="importante"
+                            class="checkbox-input" />
+                        <span class="checkbox-text">
+                            <i class="fas fa-star"></i>
+                            Marcar como importante
+                        </span>
+                    </label>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button (click)="cancelarEdicion()" class="btn-cancelar">
+                <i class="fas fa-times"></i> Cancelar
+            </button>
+            <button (click)="guardarEdicion($event)" class="btn-guardar">
+                <i class="fas fa-check"></i> Guardar cambios
+            </button>
+        </div>
+    </div>
+</div>
+<!-- Modal de compartir -->
+<app-modal-compartir [isOpen]="modalCompartirAbierto" [tipo]="'lista'" [itemId]="listaParaCompartir?.idLista"
+    [itemNombre]="listaParaCompartir?.nombre" (close)="cerrarModalCompartir()" (compartido)="alCompartir($event)">
+</app-modal-compartir>

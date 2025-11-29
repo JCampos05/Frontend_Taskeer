@@ -1,0 +1,169 @@
+<div class="vista-tablero-container">
+    <!-- Header de la categoría -->
+    <div class="tablero-header" *ngIf="categoria">
+        <button class="btn-volver" (click)="volverAtras()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="categoria-info">
+            <div class="categoria-icono" [style.background-color]="categoria.color || '#0052cc'">
+                <span *ngIf="esEmoji(categoria.icono)" class="categoria-emoji">{{ categoria.icono }}</span>
+                <i *ngIf="!esEmoji(categoria.icono) && categoria.icono"
+                    [class]="obtenerClaseIcono(categoria.icono)"></i>
+                <i *ngIf="!categoria.icono" class="fas fa-th-large"></i>
+            </div>
+            <div>
+                <h1 class="categoria-nombre">{{ categoria.nombre }}</h1>
+                <p class="categoria-meta">{{ listas.length }} lista(s)</p>
+            </div>
+        </div>
+
+        <!-- Acciones del header -->
+        <div class="header-acciones">
+            <!-- Botón compartir categoría -->
+            <button class="btn-compartir-categoria" (click)="abrirModalCompartirCategoria()"
+                title="Compartir categoría">
+                <i class="fas fa-share-nodes"></i>
+                Compartir categoría
+            </button>
+
+            <!-- Avatares de usuarios -->
+            <div class="usuarios-avatares" *ngIf="usuariosCompartidos.length > 0">
+                <div class="avatar" *ngFor="let usuario of usuariosCompartidos.slice(0, 3)" [title]="usuario.nombre"
+                    (click)="abrirPerfilUsuario(usuario)">
+                    {{ obtenerIniciales(usuario.nombre) }}
+                </div>
+                <div class="avatar-mas" *ngIf="usuariosCompartidos.length > 3"
+                    [title]="'+ ' + (usuariosCompartidos.length - 3) + ' más'" (click)="abrirModalUsuarios()">
+                    +{{ usuariosCompartidos.length - 3 }}
+                </div>
+            </div>
+
+            <!-- Botón gestionar usuarios -->
+            <button class="btn-gestionar-usuarios" (click)="abrirModalUsuarios()">
+                <i class="fas fa-user-cog"></i>
+                Gestionar usuarios
+            </button>
+        </div>
+    </div>
+
+    <!-- Mensaje de carga -->
+    <div *ngIf="cargando" class="cargando-container">
+        <div class="spinner"></div>
+        <p>Cargando tablero...</p>
+    </div>
+
+    <!-- Grid de listas - SCROLL HORIZONTAL CON DRAG & DROP -->
+    <div *ngIf="!cargando" class="listas-grid">
+        <!-- Listas importantes -->
+        <div class="seccion-listas" *ngIf="listasImportantes.length > 0">
+
+            <div class="listas-importantes-grid" cdkDropList cdkDropListOrientation="horizontal"
+                #listasImportantesDropList="cdkDropList" [cdkDropListData]="listasImportantes"
+                (cdkDropListDropped)="onDropListaImportante($event)">
+                <div *ngFor="let lista of listasImportantes" class="lista-wrapper" cdkDrag>
+                    <app-columna-tablero [lista]="lista" [tareas]="lista.tareas || []"
+                        [cargando]="lista.cargando || false" (tareasActualizadas)="recargarLista(lista.idLista!)"
+                        (compartir)="abrirModalCompartir(lista)" (editar)="editarLista(lista)"
+                        (eliminar)="confirmarEliminarLista(lista)" (tareaClick)="abrirPanelDetalles($event)">
+                    </app-columna-tablero>
+                </div>
+            </div>
+        </div>
+
+        <!-- Separador vertical -->
+        <div class="separador-secciones" *ngIf="listasImportantes.length > 0 && listasNormales.length > 0"></div>
+
+        <!-- Listas normales -->
+        <div class="seccion-listas" *ngIf="listasNormales.length > 0">
+
+            <div class="listas-normales-grid" cdkDropList cdkDropListOrientation="horizontal"
+                #listasNormalesDropList="cdkDropList" [cdkDropListData]="listasNormales"
+                (cdkDropListDropped)="onDropListaNormal($event)">
+                <div *ngFor="let lista of listasNormales" class="lista-wrapper" cdkDrag>
+                    <app-columna-tablero [lista]="lista" [tareas]="lista.tareas || []"
+                        [cargando]="lista.cargando || false" (tareasActualizadas)="recargarLista(lista.idLista!)"
+                        (compartir)="abrirModalCompartir(lista)" (editar)="editarLista(lista)"
+                        (eliminar)="confirmarEliminarLista(lista)" (tareaClick)="abrirPanelDetalles($event)">
+                    </app-columna-tablero>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensaje si no hay listas -->
+    <div *ngIf="!cargando && listas.length === 0" class="sin-listas">
+        <i class="fas fa-inbox"></i>
+        <p>No hay listas en esta categoría</p>
+        <button class="btn-agregar-lista" (click)="abrirModalNuevaLista()">
+            <i class="fas fa-plus"></i> Agregar lista
+        </button>
+    </div>
+
+    <!-- Botón flotante para agregar lista -->
+    <button class="btn-agregar-lista-flotante" (click)="abrirModalNuevaLista()" *ngIf="!cargando && categoria"
+        title="Agregar nueva lista">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- ✅ MODAL INLINE DE CONFIRMACIÓN DE ELIMINACIÓN -->
+    <div *ngIf="listaAEliminar" class="modal-overlay" (click)="cancelarEliminarLista()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Confirmar eliminación</h3>
+            </div>
+            <div class="modal-body">
+                <p>
+                    ¿Estás seguro que deseas eliminar la lista <strong>"{{ listaAEliminar.nombre }}"</strong>?
+                </p>
+                <p class="advertencia">
+                    Esta acción también eliminará todas las tareas asociadas y no se puede deshacer.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button (click)="cancelarEliminarLista()" class="btn-cancelar">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button (click)="eliminarLista()" class="btn-confirmar-eliminar">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de compartir categoría -->
+    <app-modal-compartir [isOpen]="modalCompartirCategoriaAbierto" [tipo]="'categoria'"
+        [itemId]="categoria?.idCategoria || 0" [itemNombre]="categoria?.nombre || ''"
+        [claveExistente]="categoria?.claveCompartir || null" (close)="cerrarModalCompartirCategoria()"
+        (compartido)="onCategoriaCompartida($event)">
+    </app-modal-compartir>
+
+    <!-- Modal de compartir lista individual -->
+    <app-modal-compartir [isOpen]="modalCompartirAbierto" [tipo]="'lista'" [itemId]="listaSeleccionada?.idLista || 0"
+        [itemNombre]="listaSeleccionada?.nombre || ''" [claveExistente]="listaSeleccionada?.claveCompartir || null"
+        (close)="cerrarModalCompartir()" (compartido)="onListaCompartida($event)">
+    </app-modal-compartir>
+
+    <!-- Modal de editar lista -->
+    <app-modal-lista [visible]="modalEditarListaAbierto" [listaEditando]="listaParaEditar"
+        [idCategoriaPredefinida]="categoria?.idCategoria || null" (cerrarModal)="cerrarModalEditarLista()"
+        (listaGuardada)="onListaEditada()">
+    </app-modal-lista>
+
+    <!-- Modal de usuarios para CATEGORÍA -->
+    <app-modal-usuarios-categoria [isOpen]="modalUsuariosAbierto" [categoriaId]="categoriaIdParaModal"
+        [esPropietario]="esPropietarioCategoria" [esAdmin]="esAdminCategoria" (close)="cerrarModalUsuarios()"
+        (actualizado)="onUsuariosActualizados()">
+    </app-modal-usuarios-categoria>
+
+    <!-- Notificaciones -->
+    <app-notificacion></app-notificacion>
+
+    <!-- Panel de detalles de tarea -->
+    <app-panel-detalles [abierto]="panelDetallesAbierto" [idTarea]="tareaSeleccionadaId"
+        [puedeEditar]="puedeEditarTarea" (cerrar)="cerrarPanelDetalles()" (tareaGuardada)="onTareaGuardada()">
+    </app-panel-detalles>
+
+    <app-modal-perfil-usuario [isOpen]="modalPerfilAbierto" [usuario]="usuarioSeleccionado"
+        (close)="cerrarPerfilUsuario()">
+    </app-modal-perfil-usuario>
+</div>

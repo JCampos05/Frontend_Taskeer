@@ -1,0 +1,123 @@
+<div class="seccion-card">
+    <div class="seccion-header">
+        <h2>
+            <i class="fas fa-user"></i>
+            Información Personal
+        </h2>
+        <p class="seccion-descripcion">Actualiza tus datos personales y de contacto</p>
+    </div>
+
+    <form [formGroup]="formGeneral" (ngSubmit)="guardarDatosGenerales(); $event.stopPropagation()">
+        <div class="form-grid">
+            <!-- Nombre -->
+            <div class="form-group">
+                <label for="nombre">
+                    <i class="fas fa-user"></i>
+                    Nombre
+                </label>
+                <input type="text" id="nombre" formControlName="nombre" placeholder="Tu nombre completo" />
+                <span class="form-error"
+                    *ngIf="formGeneral.get('nombre')?.invalid && formGeneral.get('nombre')?.touched">
+                    El nombre debe tener al menos 3 caracteres
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="apellido">
+                    <i class="fas fa-user"></i>
+                    Apellido
+                </label>
+                <input type="text" id="apellido" formControlName="apellido" placeholder="Tu apellido" />
+            </div>
+            <!-- Email (readonly) -->
+            <div class="form-group">
+                <label for="email">
+                    <i class="fas fa-envelope"></i>
+                    Email
+                </label>
+                <input type="email" id="email" formControlName="email" readonly />
+                <span class="form-hint">
+                    <i class="fas fa-info-circle"></i>
+                    El email no se puede cambiar
+                </span>
+            </div>
+
+            <!-- Teléfono -->
+            <div class="form-group">
+                <label for="telefono">
+                    <i class="fas fa-phone"></i>
+                    Teléfono
+                </label>
+                <input type="tel" id="telefono" formControlName="telefono" placeholder="+52 123 456 7890" />
+            </div>
+
+            <!-- Ubicación -->
+            <div class="form-group">
+                <label for="ubicacion">
+                    <i class="fas fa-location-dot"></i>
+                    Ubicación
+                </label>
+                <input type="text" id="ubicacion" formControlName="ubicacion" placeholder="Ciudad, País"
+                    (input)="onCiudadInput($event)" (blur)="ocultarSugerenciasConRetraso()" />
+
+                <!-- Sugerencias de ciudades -->
+                <div class="ciudades-sugerencias" *ngIf="mostrarSugerencias">
+                    <div class="sugerencia-item" *ngFor="let ciudad of ciudadesSugeridas"
+                        (click)="seleccionarCiudad(ciudad)">
+                        <i class="fas fa-location-dot"></i>
+                        {{ ciudad.nombreCompleto }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zona Horaria -->
+            <div class="form-group">
+                <label for="zonaHoraria">
+                    <i class="fas fa-clock"></i>
+                    Zona Horaria
+                </label>
+                <select id="zonaHoraria" formControlName="zonaHoraria" class="form-select">
+                    <option value="">Selecciona tu zona horaria</option>
+                    <optgroup *ngFor="let grupo of zonasAgrupadasPorRegion" [label]="grupo.region">
+                        <option *ngFor="let zona of grupo.zonas" [value]="zona.zona">
+                            {{ zona.nombre }} ({{ zona.offset_actual }})
+                        </option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <!-- Cargo -->
+            <div class="form-group">
+                <label for="cargo">
+                    <i class="fas fa-briefcase"></i>
+                    Cargo/Profesión
+                </label>
+                <input type="text" id="cargo" formControlName="cargo" placeholder="Ej: Desarrollador" />
+            </div>
+
+            <!-- Bio -->
+            <div class="form-group form-group-full">
+                <label for="bio">
+                    <i class="fas fa-pen"></i>
+                    Biografía
+                </label>
+                <textarea id="bio" formControlName="bio" placeholder="Cuéntanos sobre ti..." maxlength="500"></textarea>
+                <span class="form-hint">
+                    {{ formGeneral.get('bio')?.value?.length || 0 }}/500 caracteres
+                </span>
+            </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="form-actions">
+            <button type="button" class="btn-secundario" (click)="cancelarCambios(); $event.stopPropagation()">
+                <i class="fas fa-times"></i>
+                Cancelar
+            </button>
+            <button type="submit" class="btn-primario" [disabled]="guardandoGeneral || formGeneral.invalid">
+                <i class="fas fa-save"></i>
+                {{ guardandoGeneral ? 'Guardando...' : 'Guardar cambios' }}
+            </button>
+        </div>
+    </form>
+</div>

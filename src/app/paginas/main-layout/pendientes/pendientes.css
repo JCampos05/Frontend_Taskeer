@@ -1,0 +1,62 @@
+:host {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+}
+
+.vista-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.vista-header {
+  padding: 20px 32px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.vista-header h2 {
+  margin: 0 0 4px 0;
+  font-size: 28px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #172b4d;
+}
+
+.vista-header i {
+  font-size: 28px;
+  color: #ff991f;
+}
+
+.subtitulo {
+  font-size: 14px;
+  color: #626f86;
+  margin: 0;
+  padding-left: 40px;
+}
+
+app-tablero {
+  flex: 1;
+  overflow: auto;
+  background-color: #f5f3f5;
+}
+
+.vista-header p {
+  margin: 0;
+  font-size: 15px;
+  opacity: 0.95;
+  font-weight: 300;
+}
+
+app-columnas {
+  flex: 1;
+  overflow: auto;
+  background-color: #f4f5f7;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 20px rgba(9, 30, 66, 0.08);
+}
+

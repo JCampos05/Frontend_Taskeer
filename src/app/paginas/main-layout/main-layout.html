@@ -1,0 +1,32 @@
+<div class="app-container">
+  <app-header (toggleSidebarEvent)="toggleSidebar()"></app-header>
+  
+  <div class="main-container">
+    <app-sidebar 
+      #sidebarComponent 
+      [visible]="sidebarVisible"
+      (abrirModalCategoriaEvent)="abrirModalCategoria()"
+      (abrirModalListaEvent)="abrirModalLista($event)">
+    </app-sidebar>
+    
+    <div class="content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <app-modal-categoria
+    [visible]="mostrarModalCategoria"
+    (cerrarModal)="cerrarModalCategoria()"
+    (categoriaGuardada)="onCategoriaGuardada()">
+  </app-modal-categoria>
+
+  <app-modal-lista
+    [visible]="mostrarModalLista"
+    [idCategoriaPredefinida]="categoriaSeleccionadaParaLista"
+    (cerrarModal)="cerrarModalLista()"
+    (listaGuardada)="onListaGuardada()">
+  </app-modal-lista>
+  
+  <app-notificacion></app-notificacion>
+</div>

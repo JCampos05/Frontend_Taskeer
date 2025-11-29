@@ -1,0 +1,181 @@
+<!-- Overlay del modal -->
+<div class="search-overlay" (click)="cerrarModal()" (keydown.escape)="cerrarModal()">
+    <div class="search-modal" (click)="$event.stopPropagation()">
+        <!-- Header de búsqueda -->
+        <div class="search-header">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="search" 
+                    class="search-input" 
+                    placeholder="Buscar tareas o listas..."
+                    [(ngModel)]="query" 
+                    (input)="buscar()" 
+                    (keyup.escape)="manejarEscape()" 
+                    (keyup.enter)="seleccionarPrimero()"
+                    #searchInput
+                    autofocus />
+                <button class="btn-limpiar" *ngIf="query" (click)="limpiarBusqueda()" title="Limpiar búsqueda">
+                    <i class="fas fa-times"></i>
+                </button>
+                <button class="btn-limpiar" *ngIf="!query" (click)="cerrarModal()" title="Cerrar (Esc)">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenido -->
+        <div class="search-content">
+            <!-- Estado inicial -->
+            <div class="search-empty" *ngIf="!query && resultadosTareas.length === 0 && resultadosListas.length === 0">
+                <i class="fas fa-search search-empty-icon"></i>
+                <h2>Busca tus tareas o listas</h2>
+                <p>Escribe para buscar por nombre, descripción o lista</p>
+                <div class="search-tips">
+                    <h3><i class="fa-solid fa-lightbulb"></i> Consejos de búsqueda:</h3>
+                    <ul>
+                        <li>Busca tareas por nombre, descripción o lista</li>
+                        <li>Busca listas por nombre</li>
+                        <li>No necesitas escribir la palabra completa</li>
+                        <li>Presiona <kbd>Enter</kbd> para seleccionar el primer resultado</li>
+                        <li>Presiona <kbd>Esc</kbd> para cerrar</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Buscando -->
+            <div class="search-loading" *ngIf="buscando">
+                <div class="spinner"></div>
+                <p>Buscando...</p>
+            </div>
+
+            <!-- Sin resultados -->
+            <div class="search-empty" *ngIf="!buscando && sinResultados && query">
+                <i class="fas fa-search-minus search-empty-icon"></i>
+                <h2>No se encontraron resultados</h2>
+                <p>
+                    No hay tareas ni listas que coincidan con "<strong>{{ query }}</strong>"
+                </p>
+                <button class="btn-limpiar-alt" (click)="limpiarBusqueda()">Limpiar búsqueda</button>
+            </div>
+
+            <!-- Resultados -->
+            <div class="search-results" *ngIf="!buscando && (resultadosListas.length > 0 || resultadosTareas.length > 0)">
+                
+                <!-- Resultados de Listas -->
+                <div class="results-section" *ngIf="resultadosListas.length > 0">
+                    <div class="results-header">
+                        <h2>
+                            <i class="fas fa-folder"></i>
+                            {{ resultadosListas.length }} lista{{ resultadosListas.length !== 1 ? 's' : '' }}
+                        </h2>
+                    </div>
+
+                    <div class="results-list">
+                        <div class="result-card result-lista-card" 
+                            *ngFor="let resultado of resultadosListas"
+                            (click)="irALista(resultado)">
+                            
+                            <div class="result-lista-icon" [style.background]="obtenerColorFondo(resultado.lista.color)">
+                                <span *ngIf="esEmoji(resultado.lista.icono)" class="lista-emoji-large">
+                                    {{ resultado.lista.icono }}
+                                </span>
+                                <i *ngIf="!esEmoji(resultado.lista.icono)"
+                                    [class]="obtenerClaseIcono(resultado.lista.icono)"
+                                    [style.color]="resultado.lista.color || '#6b7280'"
+                                    class="lista-icon-large"></i>
+                            </div>
+
+                            <div class="result-content">
+                                <div class="result-header">
+                                    <h3 class="result-title" 
+                                        [innerHTML]="obtenerTextoResaltado(resultado.lista.nombre, 'nombre', resultado.matches)">
+                                    </h3>
+                                </div>
+
+                                <div class="result-meta">
+                                    <span class="result-count">
+                                        <i class="fas fa-tasks"></i>
+                                        {{ contarTareasLista(resultado.lista.idLista) }} tarea(s)
+                                    </span>
+                                    <span class="result-score" title="Puntuación de coincidencia">
+                                        <i class="fas fa-star"></i>
+                                        {{ resultado.score | number : '1.0-0' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resultados de Tareas -->
+                <div class="results-section" *ngIf="resultadosTareas.length > 0">
+                    <div class="results-header">
+                        <h2>
+                            <i class="fas fa-check-circle"></i>
+                            {{ resultadosTareas.length }} tarea{{ resultadosTareas.length !== 1 ? 's' : '' }}
+                        </h2>
+                    </div>
+
+                    <div class="results-list">
+                        <div class="result-card" 
+                            *ngFor="let resultado of resultadosTareas"
+                            [class.completada]="resultado.tarea.estado === 'C'"
+                            [class]="getPrioridadClass(resultado.tarea.prioridad)" 
+                            (click)="verTarea(resultado)">
+                            
+                            <div class="result-check">
+                                <input type="checkbox" 
+                                    [checked]="resultado.tarea.estado === 'C'"
+                                    (change)="cambiarEstado(resultado.tarea, $event)" 
+                                    (click)="$event.stopPropagation()" />
+                            </div>
+
+                            <div class="result-content">
+                                <div class="result-header">
+                                    <h3 class="result-title" 
+                                        [innerHTML]="obtenerTextoResaltado(resultado.tarea.nombre, 'nombre', resultado.matches)">
+                                    </h3>
+
+                                    <div class="result-badges">
+                                        <span [class]="'badge ' + getPrioridadClass(resultado.tarea.prioridad)">
+                                            {{ getPrioridadTexto(resultado.tarea.prioridad) }}
+                                        </span>
+                                        <span class="badge badge-estado" *ngIf="resultado.tarea.estado === 'C'">
+                                            <i class="fas fa-check"></i> Completada
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="result-description" *ngIf="resultado.tarea.descripcion">
+                                    <p [innerHTML]="obtenerTextoResaltado(resultado.tarea.descripcion, 'descripcion', resultado.matches)"></p>
+                                </div>
+
+                                <div class="result-meta">
+                                    <span class="result-lista" *ngIf="resultado.tarea.nombreLista">
+                                        <span *ngIf="esEmoji(resultado.tarea.iconoLista)" class="lista-emoji">
+                                            {{ resultado.tarea.iconoLista }}
+                                        </span>
+                                        <i *ngIf="!esEmoji(resultado.tarea.iconoLista)"
+                                            [class]="obtenerClaseIcono(resultado.tarea.iconoLista)"></i>
+                                        <span [innerHTML]="obtenerTextoResaltado(resultado.tarea.nombreLista, 'lista', resultado.matches)">
+                                        </span>
+                                    </span>
+
+                                    <span class="result-fecha" *ngIf="resultado.tarea.fechaVencimiento">
+                                        <i class="far fa-calendar-alt"></i>
+                                        {{ resultado.tarea.fechaVencimiento | date : 'dd/MM/yyyy' }}
+                                    </span>
+
+                                    <span class="result-score" title="Puntuación de coincidencia">
+                                        <i class="fas fa-star"></i>
+                                        {{ resultado.score | number : '1.0-0' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

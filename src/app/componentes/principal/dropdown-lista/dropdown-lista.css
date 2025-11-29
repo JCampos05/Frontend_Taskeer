@@ -1,0 +1,145 @@
+.dropdown-lista-container {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 42px;
+}
+
+.dropdown-selected:hover {
+    border-color: #6554c0;
+}
+
+.dropdown-selected.abierto {
+    border-color: #6554c0;
+    box-shadow: 0 0 0 2px rgba(101, 84, 192, 0.1);
+}
+
+.selected-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.placeholder {
+    color: #999;
+    font-size: 14px;
+}
+
+.lista-emoji {
+    font-size: 18px;
+    line-height: 1;
+}
+
+.lista-icon-wrapper {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.lista-icon-wrapper i {
+    color: white;
+    font-size: 12px;
+}
+
+.lista-nombre {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.dropdown-arrow {
+    color: #666;
+    font-size: 12px;
+    transition: transform 0.2s ease;
+}
+
+.dropdown-arrow.rotado {
+    transform: rotate(180deg);
+}
+
+.dropdown-opciones {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+    animation: dropdownOpen 0.2s ease;
+}
+
+@keyframes dropdownOpen {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-opcion {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.dropdown-opcion:hover {
+    background-color: #f5f5f5;
+}
+
+.dropdown-opcion.seleccionado {
+    background-color: #ede7f6;
+}
+
+.dropdown-opcion .lista-nombre {
+    font-weight: 400;
+}
+
+.dropdown-opcion:first-child {
+    border-bottom: 1px solid #eee;
+}
+
+/* Scrollbar personalizada */
+.dropdown-opciones::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dropdown-opciones::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.dropdown-opciones::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+.dropdown-opciones::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}

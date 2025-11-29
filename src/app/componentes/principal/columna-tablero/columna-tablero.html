@@ -1,0 +1,94 @@
+<div class="columna-tablero" [class.lista-importante]="lista.importante">
+    <!-- Header personalizado de la lista -->
+    <div class="lista-header" [style.background]="obtenerGradiente(lista.color || '#6554c0')">
+        <div class="header-content">
+            <div class="header-left">
+                <!-- Emoji o Icono -->
+                <span *ngIf="esEmoji(lista.icono)" class="lista-emoji">{{ lista.icono }}</span>
+                <span *ngIf="!esEmoji(lista.icono)" class="lista-icono">
+                    <i [class]="obtenerClaseIcono(lista.icono)"></i>
+                </span>
+                
+                <!-- Nombre -->
+                <h3 class="lista-nombre">{{ lista.nombre }}</h3>
+
+                <!-- Badge de importante - ahora a la derecha -->
+                <span class="badge-importante" *ngIf="esListaImportante()" title="Lista importante">
+                    <i class="fas fa-star"></i>
+                </span>
+            </div>
+
+            <!-- Menú de tres puntos -->
+            <div class="header-actions">
+                <button class="btn-menu-dots" (click)="toggleMenu($event)" title="Más opciones">
+                    ⋮
+                </button>
+
+                <!-- Dropdown menu -->
+                <div class="menu-dropdown" *ngIf="menuAbierto">
+                    <button class="menu-option compartir" (click)="onCompartir()">
+                        <i class="fas fa-share-nodes"></i>
+                        <span>Compartir</span>
+                    </button>
+                    <button class="menu-option editar" (click)="onEditar()">
+                        <i class="fas fa-pen"></i>
+                        <span>Editar</span>
+                    </button>
+                    <button class="menu-option eliminar" (click)="onEliminar()">
+                        <i class="fas fa-trash"></i>
+                        <span>Eliminar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress-fill"
+                    [style.width.%]="totalTareas > 0 ? (tareasCompletadas / totalTareas) * 100 : 0"></div>
+            </div>
+            <span class="progress-text">{{ tareasCompletadas }} / {{ totalTareas }}</span>
+        </div>
+    </div>
+
+    <!-- Contenido: Tareas simplificadas -->
+    <div class="tareas-contenedor" *ngIf="!cargando">
+        <!-- Tareas pendientes/en proceso -->
+        <div class="tareas-seccion" *ngIf="tareasPendientes.length > 0">
+            <div class="tareas-lista">
+                <div *ngFor="let tarea of tareasPendientes; trackBy: trackByTareaId" class="tarea-item"
+                    [class.importante]="tarea.importante" (click)="abrirDetalleTarea(tarea)">
+                    <i *ngIf="tarea.importante" class="fas fa-star icono-importante"></i>
+                    <span class="tarea-nombre">{{ tarea.nombre }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Separador -->
+        <div class="separador" *ngIf="tareasPendientes.length > 0 && tareasCompletadasList.length > 0"></div>
+
+        <!-- Tareas completadas -->
+        <div class="tareas-seccion" *ngIf="tareasCompletadasList.length > 0">
+            <div class="tareas-lista">
+                <div *ngFor="let tarea of tareasCompletadasList; trackBy: trackByTareaId" class="tarea-item completada"
+                    [class.importante]="tarea.importante" (click)="abrirDetalleTarea(tarea)">
+                    <i *ngIf="tarea.importante" class="fas fa-star icono-importante"></i>
+                    <span class="tarea-nombre">{{ tarea.nombre }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sin tareas -->
+        <div *ngIf="tareasPendientes.length === 0 && tareasCompletadasList.length === 0" class="sin-tareas">
+            <i class="fas fa-inbox"></i>
+            <p>No hay tareas en esta lista</p>
+        </div>
+    </div>
+
+    <!-- Loading state -->
+    <div *ngIf="cargando" class="cargando-lista">
+        <div class="spinner-small"></div>
+        <p>Cargando tareas...</p>
+    </div>
+</div>

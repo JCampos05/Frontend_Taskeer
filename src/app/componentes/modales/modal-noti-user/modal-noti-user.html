@@ -1,0 +1,76 @@
+<div class="modal-overlay" [class.show]="isOpen">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Notificaciones</h2>
+      <button class="btn-close" (click)="cerrar()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Botón para marcar todas como leídas -->
+      <div class="acciones-header" *ngIf="tieneNotificacionesNoLeidas">
+        <button class="btn-marcar-todas" (click)="marcarTodasLeidas()">
+          <i class="fas fa-check-double"></i>
+          <span>Marcar todas como leídas</span>
+        </button>
+      </div>
+
+      <!-- Lista de notificaciones -->
+      <div class="notificaciones-lista">
+        <div *ngFor="let notif of notificaciones" 
+     class="notificacion-item" 
+     [class.no-leida]="!notif.leida"
+     [class.clickeable]="notif.tipo !== 'invitacion_lista' || notif.leida"
+     (click)="marcarComoLeida(notif)">
+          
+          <div class="notif-icon" [ngClass]="'notif-icon-' + notif.tipo">
+            <i class="fas" [ngClass]="obtenerIcono(notif.tipo)"></i>
+          </div>
+
+          <div class="notif-content">
+            <h4>{{ notif.titulo }}</h4>
+            <p>{{ notif.mensaje }}</p>
+
+            <!-- Acciones para invitaciones -->
+            <div class="notif-acciones" *ngIf="notif.tipo === 'invitacion_lista' && !notif.leida">
+              <button class="btn-aceptar" (click)="aceptarInvitacion(notif); $event.stopPropagation()"
+                [disabled]="procesando">
+                <i class="fas fa-check"></i>
+                <span>Aceptar</span>
+              </button>
+              <button class="btn-rechazar" (click)="rechazarInvitacion(notif); $event.stopPropagation()"
+                [disabled]="procesando">
+                <i class="fas fa-times"></i>
+                <span>Rechazar</span>
+              </button>
+            </div>
+
+            <!-- ✅ Badge FUERA del div de acciones -->
+            <div class="notif-badge" *ngIf="notif.tipo === 'tarea_repetir' || notif.tipo === 'recordatorio'">
+              <span class="badge-info">
+                <i class="fas fa-external-link-alt"></i>
+                Ver tarea
+              </span>
+            </div>
+
+            <small class="notif-fecha">{{ obtenerTiempoRelativo(notif.fechaCreacion) }}</small>
+          </div>
+          <button class="btn-ocultar-notif"
+            (click)="ocultarNotificacion(notif.idNotificacion); $event.stopPropagation()" title="Ocultar notificación">
+            <i class="fas fa-times"></i>
+          </button>
+          <div class="notif-estado" *ngIf="!notif.leida">
+            <span class="badge-nuevo">Nuevo</span>
+          </div>
+        </div>
+
+        <!-- Mensaje cuando no hay notificaciones -->
+        <div *ngIf="notificaciones.length === 0" class="sin-notificaciones">
+          <i class="fas fa-bell-slash"></i>
+          <p>No tienes notificaciones</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
